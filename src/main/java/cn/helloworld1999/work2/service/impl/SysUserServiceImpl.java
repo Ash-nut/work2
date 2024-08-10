@@ -33,4 +33,20 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return ResultObj.ok().data(sysUserMapper.selectPage(page, queryWrapper));
     }
+
+    @Override
+    public ResultObj updateUser(SysUserVo sysUserVo) {
+        if (sysUserMapper.updateById(sysUserVo)==1){
+            return ResultObj.ok();
+        }
+        return ResultObj.error();
+    }
+
+    @Override
+    public ResultObj LogicDeleteUser(SysUserVo sysUserVo) {
+        if (sysUserMapper.deleteById(sysUserVo.getId())==1){
+            return ResultObj.ok();
+        }
+        return ResultObj.error();
+    }
 }
