@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RepaiManagePage</title>
+    <!-- Element UI 的 CSS 文件 -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
+    <!-- 自定义样式文件 -->
+    <link rel="stylesheet" href="/css/repairManagePage.css">
+    <!-- Vue 和 Element UI 的 JS 文件 -->
+    <script type="text/javascript" src="../js/tool/vue.js"></script>
+    <script type="text/javascript" src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header id="header">
+            <el-input v-model="repairVoObj.id" placeholder="报修信息ID"></el-input>
+            <el-input v-model="repairVoObj.comId" placeholder="保修类型ID"></el-input>
+            <el-input v-model="repairVoObj.ownerId" placeholder="报修人ID"></el-input>
+            <el-input v-model="repairVoObj.status" placeholder="处理状态"></el-input>
+            <el-button type="primary" @click="findAll">查询</el-button>
+        </el-header>
+        <div style="width: 95%;margin:auto;" >
+            <el-button type="primary" icon="el-icon-circle-plus-outline" @click="openBuildDialog()">新增</el-button>
+            <el-button type="danger" plain icon="el-icon-delete" @click="beachedDelete()">批量删除</el-button>
+        </div>
+        <el-main id="main">
+            <el-table
+                    stripe
+                    highlight-current-row
+                    :data="tableData"
+                    style="width: 100%"
+                    @selection-change="handleSelectionChange">
+                <el-table-column
+                        type="selection"
+                        width="55">
+                </el-table-column>
+                <el-table-column
+                        prop="id" label="报修信息id" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="comId" label="报修类型id" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="comDate" label="报修时间" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="handleDate" label="处理时间" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="ownerId" label="报修人id" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="status" label="处理状态" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="clr" label="不知道这个是啥" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="remarks" label="备注" width="180">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="handleEdit(scope.$index, scope.row)">编辑
+                        </el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+        <el-footer id="footer">
+            <div class="block">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="repairVoObj.currentPage"
+                        :page-sizes="[10, 50, 100, 1000]"
+                        :page-size="repairVoObj.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="repairVoObj.total">
+                </el-pagination>
+            </div>
+        </el-footer>
+    </el-container>
+    <!--<el-dialog
+            title="编辑"
+            :visible.sync="dialogVisible"
+            width="30%">
+        <el-form :model="form" label-width="80px">
+            <el-form-item label="ID">
+                <el-input v-model="form.id" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="用户名">
+                <el-input v-model="form.username"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+                <el-input v-model="form.password"></el-input>
+            </el-form-item>
+            <el-form-item label="用户类型">
+                <el-input v-model="form.type"></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false;form = {}">取 消</el-button>
+            <el-button type="primary" @click="updateUserInfo">确 定</el-button>
+        </span>
+    </el-dialog>-->
+</div>
+<!------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            form: {},
+            boxs:[],
+            multipleSelection: [],
+            dialogVisible: false,
+            tableData: {},
+            repairVoObj: {
+                id: null,
+                comId: null,
+                comDate: null,
+                handleDate: null,
+                ownerId: null,
+                status: null,
+                clr: null,
+                remarks: null,
+                currentPage: 1,
+                pageSize: 10,
+                total : 100
+            }
+
+        },
+        methods: {
+            beachedDelete(){
+                //判断是否选中复选框
+                if(this.boxs.length <= 0){
+                    this.$message({
+                        message: '请选择删除项',
+                        type: 'warning'
+                    });
+                    return;
+                }
+                var ids = "";
+                //遍历box集合
+                for(var i = 0;i < this.boxs.length;i++){
+                    var box = this.boxs[i];
+                    ids += box.id + ",";
+                }
+
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            // 查询所有维修记录的方法
+            findAll() {
+                // 在请求之前记录当前页码
+                console.log("请求前的 currentPage    " + this.repairVoObj.currentPage)
+                // 使用Axios库发送POST请求，根据查询条件获取维修记录
+                axios.post("/Repair/findAllRepair", {
+                    id: this.repairVoObj.id,
+                    comId: this.repairVoObj.comId,
+                    comDate: this.repairVoObj.comDate,
+                    handleDate: this.repairVoObj.handleDate,
+                    ownerId: this.repairVoObj.ownerId,
+                    status: this.repairVoObj.status,
+                    clr: this.repairVoObj.clr,
+                    remarks: this.repairVoObj.remarks,
+                    currentPage: this.repairVoObj.currentPage,
+                    pageSize: this.repairVoObj.pageSize,
+                }).then(res => {
+                    // 将返回的维修记录数据赋值给tableData，以便在前端展示
+                    this.tableData = res.data.data.list
+                    // 更新当前页码、页面大小和总记录数
+                    this.repairVoObj.currentPage = res.data.data.pageNum
+                    this.repairVoObj.pageSize = res.data.data.pageSize
+                    this.repairVoObj.total = res.data.data.total
+                    // 打印返回的数据，用于调试
+                    console.log(res.data.data)
+                })
+            },
+            // 处理每页条数变化的函数
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.repairVoObj.pageSize = val; // 更新每页条数
+                this.findAll(); // 重新获取数据
+            },
+            // 处理当前页码变化的函数
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.repairVoObj.currentPage = val; // 更新当前页码
+                this.findAll(); // 重新获取数据
+            },
+        },
+        mounted() {
+            this.findAll()
+        }
+    })
+</script>
+</body>
+</html>

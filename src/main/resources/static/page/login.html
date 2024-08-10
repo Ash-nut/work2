@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <!-- Element UI 的 CSS 文件 -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
+    <!-- 自定义样式文件 -->
+    <link rel="stylesheet" href="../css/login.css">
+    <!-- Vue 和 Element UI 的 JS 文件 -->
+    <script type="text/javascript" src="../js/tool/vue.js"></script>
+    <script type="text/javascript" src="../element-ui/lib/index.js"></script>
+    <!-- axios -->
+    <script type="text/javascript" src="../js/tool/axios.js"></script>
+
+</head>
+<body>
+<div id="app">
+        <el-form id="loginForm" :model="form" :rules="rules" ref="loginForm" class="loginBox">
+            <el-form-item prop="userName">
+                <el-input class="loginInput" v-model="form.account" placeholder="请输入用户名"></el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+                <el-input class="loginInput" v-model="form.password" placeholder="请输入密码"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button class="loginButton" type="primary" @click="login">登录</el-button>
+            </el-form-item>
+        </el-form>
+</div>
+
+</body>
+</html>
+<!------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------>
+
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            form: {
+                account: '',
+                password: ''
+            },
+            rules: {
+                account: [
+                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { min: 6, max: 18, message: '密码长度在6-18之间', trigger: 'blur' }
+                ]
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                console.log('DOM 已更新');
+                // 这里可以执行需要在 DOM 更新后进行的操作
+            });
+        },
+        methods: {
+            login(){
+                axios.post('/UserInfo/login',
+                    {
+                        username:this.form.account,
+                        password:this.form.password
+                    }
+                ).then(res=>{
+                    if(res.data.success==true){
+                        this.openMessage("登录成功",'success')
+                        location.href = "home.html";
+                    }else{
+                        this.openMessage("登陆失败",'error')
+                    }
+                }).catch(error => {
+                    console.error('登录请求失败:', error);
+                    this.openMessage("登录请求失败，请稍后再试",'error');
+                });
+            },
+            openMessage(str,type) {
+                this.$message({
+                    message: str,
+                    type: type
+                });
+            },
+        }
+    });
+</script>

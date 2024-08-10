@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DSM-like Interface</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: url('https://example.com/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .desktop {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .icon {
+            width: 60px;
+            height: 60px;
+            margin: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .icon img {
+            width: 100%;
+            height: 100%;
+        }
+        .icon-label {
+            font-size: 12px;
+            color: white;
+        }
+        .window {
+            width: 300px;
+            height: 200px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .window-header {
+            background: #f5f5f5;
+            padding: 10px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .window-content {
+            padding: 10px;
+            flex-grow: 1;
+            overflow: auto;
+        }
+        .window-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .window-button {
+            width: 20px;
+            height: 20px;
+            background: #ccc;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .window-button:hover {
+            background: #bbb;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="desktop">
+        <div class="icon" v-for="icon in icons" :key="icon.label" @click="openWindow(icon.label)">
+            <img :src="icon.image" alt="icon">
+            <div class="icon-label">{{ icon.label }}</div>
+        </div>
+        <div class="window" v-show="isVisible" :style="windowStyle">
+            <div class="window-header" @mousedown="startDrag">
+                <span>{{ windowTitle }}</span>
+                <div class="window-buttons">
+                    <button class="window-button" @click="minimizeWindow">_</button>
+                    <button class="window-button" @click="maximizeWindow">□</button>
+                    <button class="window-button" @click="closeWindow">X</button>
+                </div>
+            </div>
+            <div class="window-content">{{ windowContent }}</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                icons: [
+                    { label: '控制面板', image: 'https://example.com/control-panel.png' },
+                    { label: 'File Station', image: 'https://example.com/file-station.png' },
+                    { label: 'Video Station', image: 'https://example.com/video-station.png' },
+                    { label: 'WordPress', image: 'https://example.com/wordpress.png' },
+                    { label: 'Docker', image: 'https://example.com/docker.png' },
+                    { label: 'Virtual Machine Manager', image: 'https://example.com/vmm.png' }
+                ],
+                isVisible: false,
+                isMaximized: false,
+                windowTitle: '',
+                windowContent: '',
+                originalSize: { width: '300px', height: '200px', top: '50px', left: '50px' },
+                windowStyle: {
+                    width: '300px',
+                    height: '200px',
+                    top: '50px',
+                    left: '50px'
+                },
+                offsetX: 0,
+                offsetY: 0,
+                mouseX: 0,
+                mouseY: 0
+            }
+        },
+        methods: {
+            openWindow(label) {
+                this.windowTitle = label;
+                this.windowContent = `Content of ${label}`;
+                this.isVisible = true;
+            },
+            startDrag(e) {
+                e.preventDefault();
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+                document.onmouseup = this.stopDrag;
+                document.onmousemove = this.dragWindow;
+            },
+            dragWindow(e) {
+                e.preventDefault();
+                this.offsetX = this.mouseX - e.clientX;
+                this.offsetY = this.mouseY - e.clientY;
+                this.mouseX = e.clientX;
+                this.mouseY = e.clientY;
+                this.windowStyle.top = (parseInt(this.windowStyle.top) - this.offsetY) + 'px';
+                this.windowStyle.left = (parseInt(this.windowStyle.left) - this.offsetX) + 'px';
+            },
+            stopDrag() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            },
+            closeWindow() {
+                this.isVisible = false;
+            },
+            minimizeWindow() {
+                this.windowStyle.height = '30px';
+            },
+            maximizeWindow() {
+                if (this.isMaximized) {
+                    this.windowStyle.width = this.originalSize.width;
+                    this.windowStyle.height = this.originalSize.height;
+                    this.windowStyle.top = this.originalSize.top;
+                    this.windowStyle.left = this.originalSize.left;
+                } else {
+                    this.originalSize = {
+                        width: this.windowStyle.width,
+                        height: this.windowStyle.height,
+                        top: this.windowStyle.top,
+                        left: this.windowStyle.left
+                    };
+                    this.windowStyle.width = '100%';
+                    this.windowStyle.height = '100%';
+                    this.windowStyle.top = '0';
+                    this.windowStyle.left = '0';
+                }
+                this.isMaximized = !this.isMaximized;
+            }
+        }
+    });
+</script>
+</body>
+</html>

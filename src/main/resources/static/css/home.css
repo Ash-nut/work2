@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+#app {
+    width: 100vw;
+    height: 100vh;
+}
+.el-header {
+    background-color: #3451af;
+    height: 15vh;
+}
+.el-aside {
+    background-color: #5daf34;
+    width: 30vw;
+    height: 100vh;
+}
+.el-container {
+    direction: ltr;
+    background-color: #a334af;
+    width: 100vw;
+    height: 100vh;
+}
