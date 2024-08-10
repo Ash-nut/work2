@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName("sys_perms")
 public class SysPerm {
-    @TableId(value = "id",type = IdType.AUTO)
-    private Integer id;
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
+    private Long id;
     private String pid;
     @TableField("perm_name")
     private String permName;

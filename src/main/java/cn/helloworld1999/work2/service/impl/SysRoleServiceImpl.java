@@ -30,7 +30,6 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public ResultObj updateRole(SysRoleVo sysRoleVo) {
-        //System.out.println(sysRoleVo.toString());
         if (sysRoleMapper.updateById(sysRoleVo) == 1) {
             return ResultObj.ok();
         }

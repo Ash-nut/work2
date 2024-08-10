@@ -34,6 +34,8 @@ public class SysRoleController {
 
     @RequestMapping("addRole")
     ResultObj addUser(@RequestBody SysRoleVo sysRoleVo) {
+        System.out.println("000000000000000000000000000000000000");
+        System.out.println(sysRoleVo.toString());
         return sysRoleService.addRole(sysRoleVo);
     }
 }
