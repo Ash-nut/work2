@@ -42,6 +42,9 @@
                 <el-table-column
                         prop="permId" label="权限id" width="180">
                 </el-table-column>
+                <el-table-column
+                        prop="isDelete" label="状态" width="180">
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
@@ -198,10 +201,10 @@
             // 修改
             updateRole() {
                 axios.post('/SysRoleController/updateRole', {
-                    id:this.find.id,
-                    role:this.find.role,
-                    permId:this.find.permId,
-                    isDelete:this.find.isDelete,
+                    id:this.form.id,
+                    role:this.form.role,
+                    permId:this.form.permId,
+                    isDelete:this.form.isDelete,
                 }).then(res=>{
                     if(res.data.success===true){
                         this.dialogVisible = false;
@@ -236,9 +239,9 @@
             // 新增
             addRole() {
                 axios.post('/SysRoleController/addRole', {
-                    role:this.find.role,
-                    permId:this.find.permId,
-                    isDelete:this.find.isDelete,
+                    role:this.form.role,
+                    permId:this.form.permId,
+                    isDelete:this.form.isDelete,
                 }).then(res => {
                     if (res.data.success === true){
                         this.openMessage("添加成功","success")

@@ -23,18 +23,17 @@ public class SysRoleController {
     }
 
     @RequestMapping("logicDeleteRole")
-    ResultObj logicDeleteUser(@RequestBody SysRoleVo sysRoleVo) {
+    ResultObj logicDeleteRole(@RequestBody SysRoleVo sysRoleVo) {
         return sysRoleService.logicDeleteRole(sysRoleVo);
     }
 
     @RequestMapping("updateRole")
-    ResultObj updateUser(@RequestBody SysRoleVo sysRoleVo) {
+    ResultObj updateRole(@RequestBody SysRoleVo sysRoleVo) {
         return sysRoleService.updateRole(sysRoleVo);
     }
 
     @RequestMapping("addRole")
-    ResultObj addUser(@RequestBody SysRoleVo sysRoleVo) {
-        System.out.println("000000000000000000000000000000000000");
+    ResultObj addRole(@RequestBody SysRoleVo sysRoleVo) {
         System.out.println(sysRoleVo.toString());
         return sysRoleService.addRole(sysRoleVo);
     }
