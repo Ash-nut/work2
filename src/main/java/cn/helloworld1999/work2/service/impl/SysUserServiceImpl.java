@@ -49,4 +49,10 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return ResultObj.error();
     }
+    public ResultObj addUser(SysUserVo sysUserVo) {
+        if (sysUserMapper.insert(sysUserVo)==1){
+            return ResultObj.ok();
+        }
+        return ResultObj.error();
+    }
 }

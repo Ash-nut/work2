@@ -26,4 +26,8 @@ public class SysUserController {
     ResultObj updateUser(@RequestBody SysUserVo sysUserVo){
         return sysUserService.updateUser(sysUserVo);
     }
+    @RequestMapping("addUser")
+    ResultObj addUser(@RequestBody SysUserVo sysUserVo){
+        return sysUserService.addUser(sysUserVo);
+    }
 }

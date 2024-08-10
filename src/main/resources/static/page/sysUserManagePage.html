@@ -16,13 +16,19 @@
 <div id="app">
     <el-container>
         <el-header id="header">
-            <el-input v-model="find.id" placeholder="ID"></el-input>
-            <el-input v-model="find.account" placeholder="账号"></el-input>
-            <el-input v-model="find.name" placeholder="姓名"></el-input>
-            <el-input v-model="find.phoneNumber" placeholder="电话号"></el-input>
-            <el-input v-model="find.gender" placeholder="性别"></el-input>
-            <el-input v-model="find.birthdate" placeholder="出生日期"></el-input>
-            <el-button type="primary" @click="findAll">查询</el-button>
+            <span>
+                <el-input v-model="find.id" placeholder="ID"></el-input>
+                <el-input v-model="find.account" placeholder="账号"></el-input>
+                <el-input v-model="find.name" placeholder="姓名"></el-input>
+                <el-input v-model="find.phoneNumber" placeholder="电话号"></el-input>
+                <el-input v-model="find.gender" placeholder="性别"></el-input>
+                <el-input v-model="find.birthdate" placeholder="出生日期"></el-input>
+                <el-button type="primary" @click="findAll">查询</el-button>
+            </span>
+            <span>
+                <el-button type="primary" @click="dialogVisibleAdd = true">新增</el-button>
+            </span>
+
         </el-header>
         <el-main id="main">
             <el-table
@@ -109,6 +115,43 @@
             <el-button type="primary" @click="updateUser">确 定</el-button>
         </span>
     </el-dialog>
+
+    <el-dialog
+            title="新增"
+            :visible.sync="dialogVisibleAdd"
+            width="30%">
+        <el-form :model="form" :rules="addFormRules" ref="form" label-width="80px">
+
+            <el-form-item label="账号" prop="account">
+                <el-input v-model="form.account"></el-input>
+            </el-form-item>
+            <el-form-item label="姓名" prop="name">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password"></el-input>
+            </el-form-item>
+            <el-form-item label="电话号" prop="phoneNumber">
+                <el-input v-model="form.phoneNumber"></el-input>
+            </el-form-item>
+            <el-form-item label="性别" prop="gender">
+                <el-input v-model="form.gender"></el-input>
+            </el-form-item>
+            <el-form-item label="出生日期" prop="birthdate">
+                <el-input v-model="form.birthdate"></el-input>
+            </el-form-item>
+            <el-form-item label="头像" prop="imgPath">
+                <el-input v-model="form.imgPath"></el-input>
+            </el-form-item>
+            <el-form-item label="角色Id" prop="rolesId">
+                <el-input v-model="form.rolesId"></el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisibleAdd = false;form = {}">取 消</el-button>
+            <el-button type="primary" @click="addUser">确 定</el-button>
+        </span>
+    </el-dialog>
 </div>
 <!------------------------------------------------------------------------------------------------------------------>
 <!------------------------------------------------------------------------------------------------------------------>
@@ -116,7 +159,8 @@
     new Vue({
         el: '#app',
         data: {
-            dialogVisible: false, // 控制编辑弹窗的显示与隐藏
+            dialogVisibleAdd: false, //控制 新增 弹窗的显示与隐藏
+            dialogVisible: false, // 控制 编辑 弹窗的显示与隐藏
             tableData: [], // 存储表格数据
             find: {
                 id:null,
@@ -147,7 +191,23 @@
                 currentPage: 1, // 初始化当前页码
                 total: 0 //总条数
             },
-            total: 0 // 数据总条数
+            // 表单验证规则
+            addFormRules: {
+                account: [
+                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { min: 6, max: 18, message: '密码长度在6-18之间', trigger: 'blur' }
+                ],
+                rolesId:[
+                    { required: true, message: '角色Id不能为空', trigger: 'blur' }
+                ],
+                name: [
+                    { required: true, message: '姓名不能为空', trigger: 'blur' }
+                ],
+
+            }
         },
         methods: {
             findUserByInput() {
@@ -214,6 +274,7 @@
                     console.error('删除请求失败:', error);
                     this.openMessage("删除请求失败，请稍后再试",'error');
                 });
+                this.findAll()  // 重新获取数据
             },
             // 修改
             updateUser() {
@@ -241,6 +302,8 @@
                     this.dialogVisible = false;
                     this.openMessage("修改请求失败，请稍后再试",'error');
                 });
+                this.form = {}  // 清空表单
+                this.findAll()  // 重新获取数据
             },
             // 编辑 按钮
             handleEdit(index, row){
@@ -256,9 +319,23 @@
                 }).then(() => {
                     this.deleteUserById(row.id);
                 })
+                this.findAll()
             },
             // 新增
             addUser() {
+                axios.post('/SysUserController/addUser', {
+                    account: this.form.account,
+                    password: this.form.password,
+                    name: this.form.name,
+                    phoneNumber: this.form.phoneNumber,
+                    gender: this.form.gender,
+                    birthdate: this.form.birthdate,
+                    rolesId: this.form.rolesId,
+                    imgPath: this.form.imgPath,
+                }).then(res=>{
+
+                });
+                this.findAll();
             },
         },
 
