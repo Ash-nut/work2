@@ -18,9 +18,9 @@ public class SysUserController {
     ResultObj findAll(@RequestBody SysUserVo sysUserVo){
         return sysUserService.findAll(sysUserVo);
     }
-    @RequestMapping("LogicDeleteUser")
-    ResultObj LogicDeleteUser(@RequestBody SysUserVo sysUserVo){
-        return sysUserService.LogicDeleteUser(sysUserVo);
+    @RequestMapping("logicDeleteUser")
+    ResultObj logicDeleteUser(@RequestBody SysUserVo sysUserVo){
+        return sysUserService.logicDeleteUser(sysUserVo);
     }
     @RequestMapping("updateUser")
     ResultObj updateUser(@RequestBody SysUserVo sysUserVo){

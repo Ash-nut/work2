@@ -1,5 +1,4 @@
 package cn.helloworld1999.work2.service.impl;
-
 import cn.helloworld1999.work2.bean.SysUser;
 import cn.helloworld1999.work2.bean.vo.SysUserVo;
 import cn.helloworld1999.work2.mapper.SysUserMapper;
@@ -43,7 +42,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public ResultObj LogicDeleteUser(SysUserVo sysUserVo) {
+    public ResultObj logicDeleteUser(SysUserVo sysUserVo) {
         if (sysUserMapper.deleteById(sysUserVo.getId())==1){
             return ResultObj.ok();
         }

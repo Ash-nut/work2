@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>用户管理</title>
+    <title>角色管理</title>
     <!-- Element UI 的 CSS 文件 -->
     <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
     <!-- 自定义样式文件 -->
-    <link rel="stylesheet" href="/css/sysUserManagePage.css">
+    <link rel="stylesheet" href="/css/sysRoleManagePage.css">
     <!-- Vue 和 Element UI 的 JS 文件 -->
     <script type="text/javascript" src="../js/tool/vue.js"></script>
     <script type="text/javascript" src="../element-ui/lib/index.js"></script>
@@ -18,11 +18,8 @@
         <el-header id="header">
             <span>
                 <el-input v-model="find.id" placeholder="ID"></el-input>
-                <el-input v-model="find.account" placeholder="账号"></el-input>
-                <el-input v-model="find.name" placeholder="姓名"></el-input>
-                <el-input v-model="find.phoneNumber" placeholder="电话号"></el-input>
-                <el-input v-model="find.gender" placeholder="性别"></el-input>
-                <el-input v-model="find.birthdate" placeholder="出生日期"></el-input>
+                <el-input v-model="find.role" placeholder="角色"></el-input>
+                <el-input v-model="find.permId" placeholder="权限id"></el-input>
                 <el-button type="primary" @click="findAll">查询</el-button>
             </span>
             <span>
@@ -40,28 +37,10 @@
                         prop="id" label="ID" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="account" label="账号" width="180">
+                        prop="role" label="角色" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="password" label="密码" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="name" label="姓名" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="phoneNumber" label="电话号" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="gender" label="性别" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="birthdate" label="出生日期" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="rolesId" label="角色id" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="imgPath" label="头像" width="180">
+                        prop="permId" label="权限id" width="180">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -97,22 +76,16 @@
             :visible.sync="dialogVisible"
             width="30%">
         <el-form :model="form" label-width="80px">
-            <el-form-item label="账号">
-                <el-input v-model="form.account" disabled></el-input>
+            <el-form-item label="角色">
+                <el-input v-model="form.role"></el-input>
             </el-form-item>
-            <el-form-item label="姓名">
-                <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="密码">
-                <el-input v-model="form.password"></el-input>
-            </el-form-item>
-            <el-form-item label="角色Id">
-                <el-input v-model="form.rolesId"></el-input>
+            <el-form-item label="权限id">
+                <el-input v-model="form.permId"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false;form = {}">取 消</el-button>
-            <el-button type="primary" @click="updateUser">确 定</el-button>
+            <el-button type="primary" @click="updateRole">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -122,34 +95,16 @@
             width="30%">
         <el-form :model="form" :rules="addFormRules" ref="form" label-width="80px">
 
-            <el-form-item label="账号" prop="account">
-                <el-input v-model="form.account"></el-input>
+            <el-form-item label="角色" prop="role">
+                <el-input v-model="form.role"></el-input>
             </el-form-item>
-            <el-form-item label="姓名" prop="name">
-                <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-                <el-input v-model="form.password"></el-input>
-            </el-form-item>
-            <el-form-item label="电话号" prop="phoneNumber">
-                <el-input v-model="form.phoneNumber"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" prop="gender">
-                <el-input v-model="form.gender"></el-input>
-            </el-form-item>
-            <el-form-item label="出生日期" prop="birthdate">
-                <el-input v-model="form.birthdate"></el-input>
-            </el-form-item>
-            <el-form-item label="头像" prop="imgPath">
-                <el-input v-model="form.imgPath"></el-input>
-            </el-form-item>
-            <el-form-item label="角色Id" prop="rolesId">
-                <el-input v-model="form.rolesId"></el-input>
+            <el-form-item label="权限id" prop="permId">
+                <el-input v-model="form.permId"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisibleAdd = false;form = {}">取 消</el-button>
-            <el-button type="primary" @click="addUser">确 定</el-button>
+            <el-button type="primary" @click="addRole">确 定</el-button>
         </span>
     </el-dialog>
 </div>
@@ -164,27 +119,15 @@
             tableData: [], // 存储表格数据
             find: {
                 id:null,
-                account:null,
-                password:null,
-                name:null,
-                phoneNumber:null,
-                gender:null,
-                birthdate: null,
-                rolesId:null,
-                imgPath:null,
-                isDelete: null,
+                role:null,
+                permId:null,
+                isDelete:null,
             },
             form: {
                 id:null,
-                account:null,
-                password:null,
-                name:null,
-                phoneNumber:null,
-                gender:null,
-                birthdate: null,
-                rolesId:null,
-                imgPath:null,
-                isDelete: null,
+                role:null,
+                permId:null,
+                isDelete:null,
             },
             page: {
                 pageSize: 10, // 初始化每页条数
@@ -193,36 +136,27 @@
             },
             // 表单验证规则
             addFormRules: {
-                account: [
-                    {required: true, message: '用户名不能为空', trigger: 'blur'}
+                role: [
+                    {required: true, message: '角色名不为空', trigger: 'blur'}
                 ],
-                password: [
-                    {required: true, message: '密码不能为空', trigger: 'blur'},
-                    {min: 6, max: 18, message: '密码长度在6-18之间', trigger: 'blur'}
+                permId: [
+                    {required: true, message: '权限不为空', trigger: 'blur'},
                 ],
-                rolesId: [
-                    {required: true, message: '角色Id不能为空', trigger: 'blur'}
+                isDelete: [
+                    {required: true, message: '状态不为空', trigger: 'blur'}
                 ],
-                name: [
-                    {required: true, message: '姓名不能为空', trigger: 'blur'}
-                ],
-
             }
         },
         methods: {
             // 通过输入项执行动态+模糊查询
             findAll() {
-                axios.post('/SysUserController/findAll', {
+                axios.post('/SysRoleController/findAll', {
                     currentPage: this.page.currentPage,
                     pageSize: this.page.pageSize,
-                    id: this.find.id,
-                    account: this.find.account,
-                    password: this.find.password,
-                    name: this.find.name,
-                    phoneNumber: this.find.phoneNumber,
-                    gender: this.find.gender,
-                    birthdate: this.find.birthdate,
-                    rolesId: this.find.rolesId
+                    id:this.find.id,
+                    role:this.find.role,
+                    permId:this.find.permId,
+                    isDelete:this.find.isDelete,
                 }).then(res => {
                     if (res.data.success === true) {
                         this.tableData = res.data.data.records;
@@ -245,8 +179,8 @@
                 this.findAll(); // 重新获取数据
             },
             // 删除
-            deleteUserById(id){
-                axios.post('/SysUserController/logicDeleteUser', {
+            deleteRoleById(id){
+                axios.post('/SysRoleController/logicDeleteRole', {
                     id:id
                 }).then(res=>{
                     if(res.data.success===true){
@@ -262,18 +196,12 @@
                 this.findAll()  // 重新获取数据
             },
             // 修改
-            updateUser() {
-                axios.post('/SysUserController/updateUser', {
-                    id: this.form.id,
-                    account: this.form.account,
-                    password: this.form.password,
-                    name: this.form.name,
-                    phoneNumber: this.form.phoneNumber,
-                    gender: this.form.gender,
-                    birthdate: this.form.birthdate,
-                    rolesId: this.form.rolesId,
-                    imgPath: this.form.imgPath,
-                    isDelete: this.form.isDelete,
+            updateRole() {
+                axios.post('/SysRoleController/updateRole', {
+                    id:this.find.id,
+                    role:this.find.role,
+                    permId:this.find.permId,
+                    isDelete:this.find.isDelete,
                 }).then(res=>{
                     if(res.data.success===true){
                         this.dialogVisible = false;
@@ -296,26 +224,21 @@
             },
             // 删除 按钮
             handleDelete(index, row){
-                this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+                this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteUserById(row.id);
+                    this.deleteRoleById(row.id);
                 })
                 this.findAll()
             },
             // 新增
-            addUser() {
-                axios.post('/SysUserController/addUser', {
-                    account: this.form.account,
-                    password: this.form.password,
-                    name: this.form.name,
-                    phoneNumber: this.form.phoneNumber,
-                    gender: this.form.gender,
-                    birthdate: this.form.birthdate,
-                    rolesId: this.form.rolesId,
-                    imgPath: this.form.imgPath,
+            addRole() {
+                axios.post('/SysRoleController/addRole', {
+                    role:this.find.role,
+                    permId:this.find.permId,
+                    isDelete:this.find.isDelete,
                 }).then(res => {
                     if (res.data.success === true){
                         this.openMessage("添加成功","success")

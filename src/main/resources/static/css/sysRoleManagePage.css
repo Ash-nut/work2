@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.el-container {
+    height: 100vh;
+    width: 100vw;
+}
+.el-footer {
+    height: 15%;
+    background-color: rgba(43, 80, 201, 0.65);
+}
+
+.el-header {
+    height: 15%;
+    background-color: rgba(43, 80, 201, 0.65);
+}
+.el-input {
+    width: 15%;
+    height: 70%;
+    align-items: center;
+    justify-content: center;
+}
+.el-dialog .el-input{
+    width: 40%;
+    height: 15%;
+}
+#main{
+    width: 100%;
+    height: 70%
+}

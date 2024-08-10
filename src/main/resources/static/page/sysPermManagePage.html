@@ -1,13 +1,14 @@
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>用户管理</title>
-    <!-- Element UI 的 CSS 文件 -->
+    <title>主页</title>
+    &lt;!&ndash; Element UI 的 CSS 文件 &ndash;&gt;
     <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
-    <!-- 自定义样式文件 -->
+    &lt;!&ndash; 自定义样式文件 &ndash;&gt;
     <link rel="stylesheet" href="/css/sysUserManagePage.css">
-    <!-- Vue 和 Element UI 的 JS 文件 -->
+    &lt;!&ndash; Vue 和 Element UI 的 JS 文件 &ndash;&gt;
     <script type="text/javascript" src="../js/tool/vue.js"></script>
     <script type="text/javascript" src="../element-ui/lib/index.js"></script>
     <script type="text/javascript" src="../js/tool/axios.js"></script>
@@ -122,29 +123,14 @@
             width="30%">
         <el-form :model="form" :rules="addFormRules" ref="form" label-width="80px">
 
-            <el-form-item label="账号" prop="account">
+            <el-form-item label="角色" prop="account">
                 <el-input v-model="form.account"></el-input>
             </el-form-item>
-            <el-form-item label="姓名" prop="name">
+            <el-form-item label="权限" prop="name">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="password">
+            <el-form-item label="状态" prop="password">
                 <el-input v-model="form.password"></el-input>
-            </el-form-item>
-            <el-form-item label="电话号" prop="phoneNumber">
-                <el-input v-model="form.phoneNumber"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" prop="gender">
-                <el-input v-model="form.gender"></el-input>
-            </el-form-item>
-            <el-form-item label="出生日期" prop="birthdate">
-                <el-input v-model="form.birthdate"></el-input>
-            </el-form-item>
-            <el-form-item label="头像" prop="imgPath">
-                <el-input v-model="form.imgPath"></el-input>
-            </el-form-item>
-            <el-form-item label="角色Id" prop="rolesId">
-                <el-input v-model="form.rolesId"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -153,8 +139,8 @@
         </span>
     </el-dialog>
 </div>
-<!------------------------------------------------------------------------------------------------------------------>
-<!------------------------------------------------------------------------------------------------------------------>
+&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
 <script>
     new Vue({
         el: '#app',
@@ -164,27 +150,15 @@
             tableData: [], // 存储表格数据
             find: {
                 id:null,
-                account:null,
-                password:null,
-                name:null,
-                phoneNumber:null,
-                gender:null,
-                birthdate: null,
-                rolesId:null,
-                imgPath:null,
-                isDelete: null,
+                role:null,
+                permId:null,
+                isDelete:null,
             },
             form: {
                 id:null,
-                account:null,
-                password:null,
-                name:null,
-                phoneNumber:null,
-                gender:null,
-                birthdate: null,
-                rolesId:null,
-                imgPath:null,
-                isDelete: null,
+                role:null,
+                permId:null,
+                isDelete:null,
             },
             page: {
                 pageSize: 10, // 初始化每页条数
@@ -193,23 +167,33 @@
             },
             // 表单验证规则
             addFormRules: {
-                account: [
-                    {required: true, message: '用户名不能为空', trigger: 'blur'}
+                role: [
+                    {required: true, message: '角色名不为空', trigger: 'blur'}
                 ],
-                password: [
-                    {required: true, message: '密码不能为空', trigger: 'blur'},
-                    {min: 6, max: 18, message: '密码长度在6-18之间', trigger: 'blur'}
+                permId: [
+                    {required: true, message: '权限不为空', trigger: 'blur'},
                 ],
-                rolesId: [
-                    {required: true, message: '角色Id不能为空', trigger: 'blur'}
+                isDelete: [
+                    {required: true, message: '状态不为空', trigger: 'blur'}
                 ],
-                name: [
-                    {required: true, message: '姓名不能为空', trigger: 'blur'}
-                ],
-
             }
         },
         methods: {
+            findUserByInput() {
+                axios.post('/UserInfo/findUserByInput',
+                    {
+                        pageInfo: this.page,
+                        userInfo: this.find
+                    }
+                ).then(res => {
+                    if (res.data.success === true) {
+                        this.tableData = res.data.data.records;
+                        this.page.currentPage = res.data.data.current;
+                        this.page.pageSize = res.data.data.size;
+                        this.page.total = res.data.data.total; // 更新数据总条数
+                    }
+                });
+            },
             // 通过输入项执行动态+模糊查询
             findAll() {
                 axios.post('/SysUserController/findAll', {
@@ -246,7 +230,7 @@
             },
             // 删除
             deleteUserById(id){
-                axios.post('/SysUserController/logicDeleteUser', {
+                axios.post('/SysUserController/LogicDeleteUser', {
                     id:id
                 }).then(res=>{
                     if(res.data.success===true){
@@ -276,13 +260,14 @@
                     isDelete: this.form.isDelete,
                 }).then(res=>{
                     if(res.data.success===true){
+                        this.findUserByInput();
                         this.dialogVisible = false;
                         this.openMessage("修改成功",'success')
                     }else{
                         this.dialogVisible = false;
                         this.openMessage("修改失败",'error')
                     }
-                }).catch(() => {
+                }).catch(error => {
                     this.dialogVisible = false;
                     this.openMessage("修改请求失败，请稍后再试",'error');
                 });
@@ -342,3 +327,4 @@
 </script>
 </body>
 </html>
+-->
