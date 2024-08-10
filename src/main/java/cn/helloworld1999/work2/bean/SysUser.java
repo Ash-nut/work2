@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,9 +23,11 @@ public class SysUser {
     @TableField("phone_number")
     private String phoneNumber;
     private String gender;
-    private Integer age;
+    private Date birthdate;
     @TableField("roles_id")
     private Integer rolesId;
     @TableField("img_path")
     private String imgPath;
+    @TableField("is_delete")
+    private int isDelete;
 }
