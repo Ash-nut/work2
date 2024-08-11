@@ -1,6 +1,4 @@
-/*
 package cn.helloworld1999.work2.service.impl;
-
 import cn.helloworld1999.work2.bean.SysPerm;
 import cn.helloworld1999.work2.bean.vo.SysPermVo;
 import cn.helloworld1999.work2.mapper.SysPermMapper;
@@ -9,7 +7,9 @@ import cn.helloworld1999.work2.util.ResultObj;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SysPermServiceImpl implements SysPermService {
     @Resource
     private SysPermMapper sysPermMapper;
@@ -35,7 +35,6 @@ public class SysPermServiceImpl implements SysPermService {
         return ResultObj.error();
     }
 
-
     @Override
     public ResultObj logicDeletePerm(SysPermVo sysPermVo) {
         if (sysPermMapper.deleteById(sysPermVo.getId()) == 1) {
@@ -52,4 +51,3 @@ public class SysPermServiceImpl implements SysPermService {
         return ResultObj.error();
     }
 }
-*/

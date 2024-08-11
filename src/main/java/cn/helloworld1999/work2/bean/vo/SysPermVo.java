@@ -1,5 +1,4 @@
 package cn.helloworld1999.work2.bean.vo;
-
 import cn.helloworld1999.work2.bean.SysPerm;
 import lombok.AllArgsConstructor;
 import lombok.Data;

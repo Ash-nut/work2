@@ -1,14 +1,13 @@
-<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>主页</title>
-    &lt;!&ndash; Element UI 的 CSS 文件 &ndash;&gt;
+    <!-- Element UI 的 CSS 文件 -->
     <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
-    &lt;!&ndash; 自定义样式文件 &ndash;&gt;
-    <link rel="stylesheet" href="/css/sysUserManagePage.css">
-    &lt;!&ndash; Vue 和 Element UI 的 JS 文件 &ndash;&gt;
+    <!-- 自定义样式文件 -->
+    <link rel="stylesheet" href="/css/sysPermManagePage.css">
+    <!-- Vue 和 Element UI 的 JS 文件 -->
     <script type="text/javascript" src="../js/tool/vue.js"></script>
     <script type="text/javascript" src="../element-ui/lib/index.js"></script>
     <script type="text/javascript" src="../js/tool/axios.js"></script>
@@ -19,11 +18,10 @@
         <el-header id="header">
             <span>
                 <el-input v-model="find.id" placeholder="ID"></el-input>
-                <el-input v-model="find.account" placeholder="账号"></el-input>
-                <el-input v-model="find.name" placeholder="姓名"></el-input>
-                <el-input v-model="find.phoneNumber" placeholder="电话号"></el-input>
-                <el-input v-model="find.gender" placeholder="性别"></el-input>
-                <el-input v-model="find.birthdate" placeholder="出生日期"></el-input>
+                <el-input v-model="find.pid" placeholder="父权限id"></el-input>
+                <el-input v-model="find.permName" placeholder="权限名"></el-input>
+                <el-input v-model="find.route" placeholder="路由地址"></el-input>
+                <el-input v-model="find.isDelete" placeholder="状态"></el-input>
                 <el-button type="primary" @click="findAll">查询</el-button>
             </span>
             <span>
@@ -41,28 +39,19 @@
                         prop="id" label="ID" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="account" label="账号" width="180">
+                        prop="pid" label="父权限id" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="password" label="密码" width="180">
+                        prop="permName" label="权限名" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="name" label="姓名" width="180">
+                        prop="route" label="路由地址" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="phoneNumber" label="电话号" width="180">
+                        prop="idDelete" label="状态" width="180">
                 </el-table-column>
                 <el-table-column
                         prop="gender" label="性别" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="birthdate" label="出生日期" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="rolesId" label="角色id" width="180">
-                </el-table-column>
-                <el-table-column
-                        prop="imgPath" label="头像" width="180">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -98,22 +87,22 @@
             :visible.sync="dialogVisible"
             width="30%">
         <el-form :model="form" label-width="80px">
-            <el-form-item label="账号">
-                <el-input v-model="form.account" disabled></el-input>
+            <el-form-item label="父权限id">
+                <el-input v-model="form.id" disabled></el-input>
             </el-form-item>
-            <el-form-item label="姓名">
-                <el-input v-model="form.name"></el-input>
+            <el-form-item label="权限名">
+                <el-input v-model="form.permName"></el-input>
             </el-form-item>
-            <el-form-item label="密码">
-                <el-input v-model="form.password"></el-input>
+            <el-form-item label="路由地址">
+                <el-input v-model="form.route"></el-input>
             </el-form-item>
-            <el-form-item label="角色Id">
-                <el-input v-model="form.rolesId"></el-input>
+            <el-form-item label="状态">
+                <el-input v-model="form.isDelete"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false;form = {}">取 消</el-button>
-            <el-button type="primary" @click="updateUser">确 定</el-button>
+            <el-button type="primary" @click="updatePerm">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -135,12 +124,12 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisibleAdd = false;form = {}">取 消</el-button>
-            <el-button type="primary" @click="addUser">确 定</el-button>
+            <el-button type="primary" @click="addPerm">确 定</el-button>
         </span>
     </el-dialog>
 </div>
-&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
-&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;
+<!------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------>
 <script>
     new Vue({
         el: '#app',
@@ -150,15 +139,17 @@
             tableData: [], // 存储表格数据
             find: {
                 id:null,
-                role:null,
-                permId:null,
-                isDelete:null,
+                pid:null,
+                permName:null,
+                route:null,
+                isDelete:null
             },
             form: {
                 id:null,
-                role:null,
-                permId:null,
-                isDelete:null,
+                pid:null,
+                permName:null,
+                route:null,
+                isDelete:null
             },
             page: {
                 pageSize: 10, // 初始化每页条数
@@ -167,11 +158,14 @@
             },
             // 表单验证规则
             addFormRules: {
-                role: [
-                    {required: true, message: '角色名不为空', trigger: 'blur'}
+                pid: [
+                    {required: true, message: '父权限不为空', trigger: 'blur'}
                 ],
-                permId: [
-                    {required: true, message: '权限不为空', trigger: 'blur'},
+                permName: [
+                    {required: true, message: '权限名不为空', trigger: 'blur'},
+                ],
+                route: [
+                    {required: true, message: '路由不为空', trigger: 'blur'}
                 ],
                 isDelete: [
                     {required: true, message: '状态不为空', trigger: 'blur'}
@@ -179,34 +173,16 @@
             }
         },
         methods: {
-            findUserByInput() {
-                axios.post('/UserInfo/findUserByInput',
-                    {
-                        pageInfo: this.page,
-                        userInfo: this.find
-                    }
-                ).then(res => {
-                    if (res.data.success === true) {
-                        this.tableData = res.data.data.records;
-                        this.page.currentPage = res.data.data.current;
-                        this.page.pageSize = res.data.data.size;
-                        this.page.total = res.data.data.total; // 更新数据总条数
-                    }
-                });
-            },
             // 通过输入项执行动态+模糊查询
             findAll() {
-                axios.post('/SysUserController/findAll', {
+                axios.post('/SysPermController/findAll', {
                     currentPage: this.page.currentPage,
                     pageSize: this.page.pageSize,
-                    id: this.find.id,
-                    account: this.find.account,
-                    password: this.find.password,
-                    name: this.find.name,
-                    phoneNumber: this.find.phoneNumber,
-                    gender: this.find.gender,
-                    birthdate: this.find.birthdate,
-                    rolesId: this.find.rolesId
+                    id:this.find.id,
+                    pid:this.find.pid,
+                    permName:this.find.permName,
+                    route:this.find.route,
+                    isDelete:this.find.isDelete
                 }).then(res => {
                     if (res.data.success === true) {
                         this.tableData = res.data.data.records;
@@ -229,8 +205,8 @@
                 this.findAll(); // 重新获取数据
             },
             // 删除
-            deleteUserById(id){
-                axios.post('/SysUserController/LogicDeleteUser', {
+            deletePermById(id){
+                axios.post('/SysPermController/logicDeletePerm', {
                     id:id
                 }).then(res=>{
                     if(res.data.success===true){
@@ -246,21 +222,15 @@
                 this.findAll()  // 重新获取数据
             },
             // 修改
-            updateUser() {
-                axios.post('/SysUserController/updateUser', {
-                    id: this.form.id,
-                    account: this.form.account,
-                    password: this.form.password,
-                    name: this.form.name,
-                    phoneNumber: this.form.phoneNumber,
-                    gender: this.form.gender,
-                    birthdate: this.form.birthdate,
-                    rolesId: this.form.rolesId,
-                    imgPath: this.form.imgPath,
-                    isDelete: this.form.isDelete,
+            updatePerm() {
+                axios.post('/SysPermController/updatePerm', {
+                    id:this.form.id,
+                    pid:this.form.pid,
+                    permName:this.form.permName,
+                    route:this.form.route,
+                    isDelete:this.form.isDelete
                 }).then(res=>{
                     if(res.data.success===true){
-                        this.findUserByInput();
                         this.dialogVisible = false;
                         this.openMessage("修改成功",'success')
                     }else{
@@ -286,21 +256,18 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.deleteUserById(row.id);
+                    this.deletePermById(row.id);
                 })
                 this.findAll()
             },
             // 新增
-            addUser() {
-                axios.post('/SysUserController/addUser', {
-                    account: this.form.account,
-                    password: this.form.password,
-                    name: this.form.name,
-                    phoneNumber: this.form.phoneNumber,
-                    gender: this.form.gender,
-                    birthdate: this.form.birthdate,
-                    rolesId: this.form.rolesId,
-                    imgPath: this.form.imgPath,
+            addPerm() {
+                axios.post('/SysPermController/addPerm', {
+                    id:this.form.id,
+                    pid:this.form.pid,
+                    permName:this.form.permName,
+                    route:this.form.route,
+                    isDelete:this.form.isDelete
                 }).then(res => {
                     if (res.data.success === true){
                         this.openMessage("添加成功","success")
@@ -327,4 +294,3 @@
 </script>
 </body>
 </html>
--->
