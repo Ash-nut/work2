@@ -53,17 +53,12 @@
                 ]
             }
         },
-        mounted() {
-            this.$nextTick(() => {
-                console.log('DOM 已更新');
-                // 这里可以执行需要在 DOM 更新后进行的操作
-            });
-        },
+
         methods: {
             login(){
-                axios.post('/UserInfo/login',
+                axios.post('/SysUserController/login',
                     {
-                        username:this.form.account,
+                        account:this.form.account,
                         password:this.form.password
                     }
                 ).then(res=>{
