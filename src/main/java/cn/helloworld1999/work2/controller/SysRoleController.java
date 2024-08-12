@@ -2,13 +2,17 @@
 package cn.helloworld1999.work2.controller;*/
 package cn.helloworld1999.work2.controller;
 
+import cn.helloworld1999.work2.bean.RelUserRole;
 import cn.helloworld1999.work2.bean.vo.SysRoleVo;
 import cn.helloworld1999.work2.service.SysRoleService;
 import cn.helloworld1999.work2.util.ResultObj;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController

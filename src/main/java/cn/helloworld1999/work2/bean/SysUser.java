@@ -22,7 +22,7 @@ public class SysUser {
     private String gender;
     private Date birthdate;
     @TableField("roles_id")
-    private Integer rolesId;
+    private Long rolesId;
     @TableField("img_path")
     private String imgPath;
     @TableLogic

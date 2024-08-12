@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class SysPerm {
     @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
-    private String pid;
+    private Long pid;
     @TableField("perm_name")
     private String permName;
     private String route;

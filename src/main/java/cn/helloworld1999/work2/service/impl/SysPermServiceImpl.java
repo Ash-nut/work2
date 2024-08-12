@@ -1,5 +1,6 @@
 package cn.helloworld1999.work2.service.impl;
 import cn.helloworld1999.work2.bean.SysPerm;
+import cn.helloworld1999.work2.bean.SysRole;
 import cn.helloworld1999.work2.bean.vo.SysPermVo;
 import cn.helloworld1999.work2.mapper.SysPermMapper;
 import cn.helloworld1999.work2.service.SysPermService;
@@ -49,5 +50,12 @@ public class SysPermServiceImpl implements SysPermService {
             return ResultObj.ok();
         }
         return ResultObj.error();
+    }
+
+    @Override
+    public ResultObj findRolePerm(SysRole sysRole) {
+        LambdaQueryWrapper<SysPerm> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysPerm::getId, sysRole.getPermId());
+        return ResultObj.ok().data(sysPermMapper.selectOne(queryWrapper));
     }
 }
