@@ -7,7 +7,9 @@ import cn.helloworld1999.work2.util.ResultObj;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
@@ -53,5 +55,36 @@ public class SysUserServiceImpl implements SysUserService {
             return ResultObj.ok();
         }
         return ResultObj.error();
+    }
+    public ResultObj login(HttpSession session, SysUserVo sysUserVo) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getAccount, sysUserVo.getAccount()).eq(SysUser::getPassword, sysUserVo.getPassword());
+
+        SysUser sysUser = sysUserMapper.selectOne(queryWrapper, true);
+        if (sysUser != null) {
+            session.setAttribute("user", sysUser);
+            return ResultObj.ok();
+        }
+        return null;
+    }
+
+    @Override
+    public ResultObj logout(HttpSession session) {
+        session.removeAttribute("user");
+        return ResultObj.ok();
+    }
+
+    @Transactional
+    @Override
+    public ResultObj signIn(SysUserVo sysUserVo) {
+        try{
+            if ((sysUserMapper.selectById(sysUserVo.getId())!=null)){
+                sysUserMapper.insert(sysUserVo);
+                return ResultObj.ok();
+            }
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
+        return ResultObj.error().msg("账号已存在，注册失败");
     }
 }

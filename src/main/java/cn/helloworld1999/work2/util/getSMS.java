@@ -1,9 +1,5 @@
-package cn.helloworld1999.work2.util; /**
- *
- *//*
-
-
-package cn.helloworld1999.community3.util;
+/*
+package cn.helloworld1999.work2.util;
 
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
