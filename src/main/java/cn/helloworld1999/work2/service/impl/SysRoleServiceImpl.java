@@ -31,7 +31,6 @@ public class SysRoleServiceImpl implements SysRoleService {
             queryWrapper.eq(SysRole::getId, sysRoleVo.getId());
         } else {
             queryWrapper.like(sysRoleVo.getRole() != null, SysRole::getRole, sysRoleVo.getRole())
-                    .like(sysRoleVo.getPermId() != null, SysRole::getPermId, sysRoleVo.getPermId())
                     .like(sysRoleVo.getIsDelete() != null, SysRole::getIsDelete, sysRoleVo.getIsDelete());
         }
         return ResultObj.ok().data(sysRoleMapper.selectPage(page, queryWrapper));
@@ -74,6 +73,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         LambdaQueryWrapper<RelUserRole> relUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<SysRole> sysRoleVoLambdaQueryWrapper = new LambdaQueryWrapper<>();
         List<RelUserRole> relUserRoleList;
+        List<SysRole> sysRoleList = new java.util.ArrayList<>();
         if (sysUser == null) {
             sysUser = (SysUserVo) session.getAttribute("user");
             relUserRoleLambdaQueryWrapper.eq(RelUserRole::getUid, sysUser.getId());
@@ -82,8 +82,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         }
         relUserRoleList = relUserRoleMapper.selectList(relUserRoleLambdaQueryWrapper);
         for (RelUserRole relUserRole : relUserRoleList) {
+            sysRoleVoLambdaQueryWrapper.clear();
             sysRoleVoLambdaQueryWrapper.eq(SysRole::getId, relUserRole.getRid());
+            sysRoleList.add(sysRoleMapper.selectOne(sysRoleVoLambdaQueryWrapper));
         }
-        return sysRoleMapper.selectList(sysRoleVoLambdaQueryWrapper);
+        return sysRoleList;
     }
 }

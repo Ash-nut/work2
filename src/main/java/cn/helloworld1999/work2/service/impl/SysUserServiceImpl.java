@@ -29,7 +29,6 @@ public class SysUserServiceImpl implements SysUserService {
                     .like(sysUserVo.getPhoneNumber() != null, SysUser::getPhoneNumber, sysUserVo.getPhoneNumber())
                     .like(sysUserVo.getGender() != null, SysUser::getGender, sysUserVo.getGender())
                     .like(sysUserVo.getBirthdate() != null, SysUser::getBirthdate, sysUserVo.getBirthdate())
-                    .like(sysUserVo.getRolesId() != null, SysUser::getRolesId, sysUserVo.getRolesId())
                     .like(sysUserVo.getImgPath() != null, SysUser::getImgPath, sysUserVo.getImgPath());
         }
         return ResultObj.ok().data(sysUserMapper.selectPage(page, queryWrapper));

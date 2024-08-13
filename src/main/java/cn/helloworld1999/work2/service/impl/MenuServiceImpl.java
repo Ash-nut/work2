@@ -1,52 +1,23 @@
 package cn.helloworld1999.work2.service.impl;
 
-import cn.helloworld1999.work2.bean.*;
-import cn.helloworld1999.work2.mapper.RelUserRoleMapper;
-import cn.helloworld1999.work2.mapper.SysRoleMapper;
+import cn.helloworld1999.work2.bean.MenuBody;
+import cn.helloworld1999.work2.bean.SysPerm;
+import cn.helloworld1999.work2.bean.SysRole;
+import cn.helloworld1999.work2.service.MenuService;
 import cn.helloworld1999.work2.service.SysPermService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import jakarta.annotation.Resource;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import cn.helloworld1999.work2.util.ResultObj;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-@SpringBootTest
-public class RelUserRoleServiceImplTest{
-    @Resource
-    private RelUserRoleMapper relUserRoleMapper;
-    @Resource
-    private SysRoleMapper sysRoleMapper;
-
-    @Test
-
-    public void findUserRole() {
-        SysUser sysUser = new SysUser();
-        sysUser.setId(1L);
-        LambdaQueryWrapper<RelUserRole> relUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<SysRole> sysRoleVoLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        List<RelUserRole> relUserRoleList;
-        List<SysRole> sysRoleList = new java.util.ArrayList<>();
-        relUserRoleLambdaQueryWrapper.eq(RelUserRole::getUid, sysUser.getId());
-        relUserRoleList = relUserRoleMapper.selectList(relUserRoleLambdaQueryWrapper);
-        for (RelUserRole relUserRole : relUserRoleList) {
-            sysRoleVoLambdaQueryWrapper.clear();
-            sysRoleVoLambdaQueryWrapper.eq(SysRole::getId, relUserRole.getRid());
-            sysRoleList.add(sysRoleMapper.selectOne(sysRoleVoLambdaQueryWrapper));
-        }
-        System.out.println(sysRoleList);
-    }
-
-
-    @Resource
+public class MenuServiceImpl implements MenuService {
     private SysPermService sysPermService;
 
-    @Test
-    public void createUserMenu() {
-        SysRole sysRole = new SysRole();
-        sysRole.setId(1L);
+    @Override
+    public ResultObj createRoleMenu(HttpSession session) {
+        SysRole sysRole = (SysRole) session.getAttribute("sysRole");
 
         List<SysPerm> sysPerms = (List<SysPerm>) sysPermService.findRolePerm(sysRole).getData();
         System.out.println("查询到的权限为：" + sysPerms.toString());
@@ -83,8 +54,6 @@ public class RelUserRoleServiceImplTest{
                 }
             }
         }
-
-        System.out.println(menuBodyEnd);
+        return ResultObj.ok().data(menuBodyEnd);
     }
-
 }

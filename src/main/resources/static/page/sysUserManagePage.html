@@ -58,9 +58,6 @@
                         prop="birthdate" label="出生日期" width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="rolesId" label="角色id" width="180">
-                </el-table-column>
-                <el-table-column
                         prop="imgPath" label="头像" width="180">
                 </el-table-column>
                 <el-table-column label="操作">
@@ -106,9 +103,6 @@
             <el-form-item label="密码">
                 <el-input v-model="form.password"></el-input>
             </el-form-item>
-            <el-form-item label="角色Id">
-                <el-input v-model="form.rolesId"></el-input>
-            </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false;form = {}">取 消</el-button>
@@ -143,9 +137,6 @@
             <el-form-item label="头像" prop="imgPath">
                 <el-input v-model="form.imgPath"></el-input>
             </el-form-item>
-            <el-form-item label="角色Id" prop="rolesId">
-                <el-input v-model="form.rolesId"></el-input>
-            </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisibleAdd = false;form = {}">取 消</el-button>
@@ -170,7 +161,6 @@
                 phoneNumber:null,
                 gender:null,
                 birthdate: null,
-                rolesId:null,
                 imgPath:null,
                 isDelete: null,
             },
@@ -182,7 +172,6 @@
                 phoneNumber:null,
                 gender:null,
                 birthdate: null,
-                rolesId:null,
                 imgPath:null,
                 isDelete: null,
             },
@@ -199,9 +188,6 @@
                 password: [
                     {required: true, message: '密码不能为空', trigger: 'blur'},
                     {min: 6, max: 18, message: '密码长度在6-18之间', trigger: 'blur'}
-                ],
-                rolesId: [
-                    {required: true, message: '角色Id不能为空', trigger: 'blur'}
                 ],
                 name: [
                     {required: true, message: '姓名不能为空', trigger: 'blur'}
@@ -222,7 +208,6 @@
                     phoneNumber: this.find.phoneNumber,
                     gender: this.find.gender,
                     birthdate: this.find.birthdate,
-                    rolesId: this.find.rolesId
                 }).then(res => {
                     if (res.data.success === true) {
                         this.tableData = res.data.data.records;
@@ -271,7 +256,6 @@
                     phoneNumber: this.form.phoneNumber,
                     gender: this.form.gender,
                     birthdate: this.form.birthdate,
-                    rolesId: this.form.rolesId,
                     imgPath: this.form.imgPath,
                     isDelete: this.form.isDelete,
                 }).then(res=>{
@@ -314,7 +298,6 @@
                     phoneNumber: this.form.phoneNumber,
                     gender: this.form.gender,
                     birthdate: this.form.birthdate,
-                    rolesId: this.form.rolesId,
                     imgPath: this.form.imgPath,
                 }).then(res => {
                     if (res.data.success === true){

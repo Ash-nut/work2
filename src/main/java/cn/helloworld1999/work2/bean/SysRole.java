@@ -13,8 +13,6 @@ public class SysRole {
     @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
     private String role;
-    @TableField("perm_id")
-    private Long permId;
     @TableLogic
     @TableField("is_delete")
     private Integer isDelete;

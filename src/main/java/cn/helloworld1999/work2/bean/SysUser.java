@@ -21,8 +21,6 @@ public class SysUser {
     private String phoneNumber;
     private String gender;
     private Date birthdate;
-    @TableField("roles_id")
-    private Long rolesId;
     @TableField("img_path")
     private String imgPath;
     @TableLogic
