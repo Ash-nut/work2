@@ -1,6 +1,8 @@
 package cn.helloworld1999.work2.controller;
 
+import cn.helloworld1999.work2.bean.SysRole;
 import cn.helloworld1999.work2.bean.vo.SysUserVo;
+import cn.helloworld1999.work2.service.MenuService;
 import cn.helloworld1999.work2.service.SysRoleService;
 import cn.helloworld1999.work2.service.SysUserService;
 import cn.helloworld1999.work2.util.ResultObj;
@@ -17,6 +19,8 @@ public class LoginController {
     private SysUserService sysUserService;
     @Resource
     private SysRoleService sysRoleService;
+    @Resource
+    private MenuService menuService;
     @RequestMapping("login")
     ResultObj login(HttpSession session, @RequestBody SysUserVo sysUserVo) {
         return sysUserService.login(session, sysUserVo);
@@ -33,5 +37,14 @@ public class LoginController {
     @RequestMapping("findUserRole")
     ResultObj findUserRole(HttpSession session,SysUserVo sysUserVo) {
         return ResultObj.ok().data(sysRoleService.findUserRole(session, sysUserVo));
+    }
+    @RequestMapping("choosingRole")
+    ResultObj choosingRole(HttpSession session,@RequestBody SysRole sysRole){
+        System.out.println(sysRole.toString());
+        return menuService.choosingRole(session, sysRole);
+    }
+    @RequestMapping("createRoleMenu")
+    ResultObj createRoleMenu(HttpSession session){
+        return menuService.createRoleMenu(session);
     }
 }

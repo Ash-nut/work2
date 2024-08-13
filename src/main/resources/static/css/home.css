@@ -1,23 +1,71 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
+
 #app {
     width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
 .el-header {
-    background-color: #3451af;
-    height: 15vh;
+    background-color: #409EFF; /* Element UI 主色 */
+    height: 10vh; /* 调整高度 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff; /* 白色 */
+    font-size: 1.5em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .el-aside {
-    background-color: #5daf34;
-    width: 30vw;
-    height: 100vh;
+    background-color: #ffffff; /* Element UI 浅蓝色 */
+    width: 20vw; /* 调整宽度 */
+    height: calc(100vh - 10vh); /* 调整高度 */
+    padding: 0; /* 移除内边距 */
+    overflow-y: auto;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    color: #333333; /* 深灰色 */
 }
+
 .el-container {
-    direction: ltr;
-    background-color: #a334af;
+    display: flex;
+    flex-direction: row;
+    background-color: #f5f7fa; /* 浅灰色 */
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 10vh); /* 调整高度 */
+}
+
+.el-main {
+    flex: 1;
+    padding: 0;
+    background-color: #ffffff; /* 白色 */
+    overflow-y: auto;
+}
+
+.el-menu-vertical-demo {
+    border-right: none;
+    width: 100%; /* 设置菜单宽度为100% */
+    padding: 0; /* 移除内边距 */
+}
+
+.el-menu-item, .el-submenu__title {
+    font-size: 1.2em;
+    color: #333333; /* 深灰色 */
+}
+
+.el-menu-item:hover, .el-submenu__title:hover {
+    background-color: #409EFF !important; /* Element UI 主色 */
+    color: #ffffff !important; /* 白色 */
+}
+
+iframe {
+    border: none; /* 移除 iframe 的边框 */
+    width: 100%; /* 设置 iframe 宽度为100% */
+    height: 100%; /* 设置 iframe 高度为100% */
 }

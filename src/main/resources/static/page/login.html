@@ -31,18 +31,12 @@
             title="选择角色"
             :visible.sync="dialogVisibleCR"
             width="30%">
-        <el-table :data="roles" :model="roles" :rules="addFormRules" ref="roles" label-width="800px">
-
-            <el-table-column
-                    prop="id" label="角色ID" width="180">
-            </el-table-column>
-            <el-table-column
-                    prop="role" label="角色身份" width="180">
-            </el-table-column>
-        </el-table>
+        <el-radio-group v-model="selectRole" size="medium">
+            <el-radio v-for="item in roles" border :label="item.id" :key="item.id">{{item.role}}</el-radio>
+        </el-radio-group>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisibleAdd = false;roles = {}">取 消</el-button>
-            <el-button type="primary" @click="">确 定</el-button>
+            <el-button style="width: 30%" type="danger" size="medium" @click="dialogVisibleCR = false;roles = {}">取 消</el-button>
+            <el-button style="width: 30%" type="primary" size="medium" @click="choosingRole(selectRole)">确 定</el-button>
         </span>
     </el-dialog>
 </div>
@@ -61,6 +55,7 @@
                 account: '',
                 password: ''
             },
+            selectRole:null,
             roles: [],
             rules: {
                 account: [
@@ -103,7 +98,6 @@
                     this.roles = res.data.data;
                     if (this.roles.length > 1) {
                         // 弹窗，【选择角色】
-                        console.log('应该弹窗了')
                         this.dialogVisibleCR = true;
                     } else {
                         location.href = "home.html";
@@ -112,8 +106,23 @@
                     this.openMessage("获取角色失败，请稍后再试", 'error');
                 });
             },
-            choosingRole(role) {
-
+            choosingRole(selectRole) {
+                console.log("选择的角色信息：")
+                console.log(selectRole)
+                axios.post('/LoginController/choosingRole',
+                    {
+                        id:selectRole
+                    }
+                ).then(res=>{
+                    if(res.data.success===true){
+                        this.openMessage("选择角色成功",'success')
+                        location.href = "home.html";
+                    }else{
+                        this.openMessage("选择角色失败",'error')
+                    }
+                }).catch(() => {
+                    this.openMessage("选择角色失败，请稍后再试", 'error');
+                });
             },
             openMessage(str,type) {
                 this.$message({

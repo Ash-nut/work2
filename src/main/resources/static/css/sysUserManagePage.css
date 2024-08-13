@@ -1,31 +1,73 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
+
 .el-container {
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
 }
+
 .el-footer {
     height: 15%;
-    background-color: rgba(43, 80, 201, 0.65);
+    background-color: #409EFF; /* Element UI 主色 */
+    color: #ffffff; /* 白色文字 */
 }
 
 .el-header {
-    height: 15%;
-    background-color: rgba(43, 80, 201, 0.65);
+    height: 20% !important; /* 使用重要性标记 */
+    background-color: #F56C6C; /* Element UI 主色 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: #ffffff; /* 白色文字 */
+    flex-shrink: 0; /* 防止高度被压缩 */
 }
+
 .el-input {
     width: 15%;
     height: 70%;
     align-items: center;
     justify-content: center;
 }
-.el-dialog .el-input{
+
+.el-dialog .el-input {
     width: 40%;
     height: 15%;
 }
-#main{
+
+.el-main {
     width: 100%;
-    height: 70%
+    flex: 1; /* 使主内容区域填满剩余空间 */
+    background-color: #ffffff; /* 白色背景 */
+}
+
+.el-table {
+    width: 100%;
+    background-color: #ffffff; /* 白色背景 */
+}
+
+.el-table-column {
+    width: 180px;
+}
+
+.el-button {
+    margin: 0 5px;
+}
+
+.dialog-footer {
+    text-align: right;
+    padding: 10px 0;
+}
+
+.block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }

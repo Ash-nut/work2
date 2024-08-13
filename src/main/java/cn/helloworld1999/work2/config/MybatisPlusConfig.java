@@ -3,10 +3,9 @@ package cn.helloworld1999.work2.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-//@MapperScan("cn.helloworld1999.work2.mapper")
+
 @Configuration
 public class MybatisPlusConfig {
 

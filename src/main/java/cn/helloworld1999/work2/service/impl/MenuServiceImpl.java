@@ -3,9 +3,11 @@ package cn.helloworld1999.work2.service.impl;
 import cn.helloworld1999.work2.bean.MenuBody;
 import cn.helloworld1999.work2.bean.SysPerm;
 import cn.helloworld1999.work2.bean.SysRole;
+import cn.helloworld1999.work2.mapper.SysRoleMapper;
 import cn.helloworld1999.work2.service.MenuService;
 import cn.helloworld1999.work2.service.SysPermService;
 import cn.helloworld1999.work2.util.ResultObj;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,14 @@ import java.util.*;
 
 @Service
 public class MenuServiceImpl implements MenuService {
+    @Resource
+    private SysRoleMapper sysRoleMapper;
+    @Resource
     private SysPermService sysPermService;
+
+    public MenuServiceImpl(SysRoleMapper sysRoleMapper) {
+        this.sysRoleMapper = sysRoleMapper;
+    }
 
     @Override
     public ResultObj createRoleMenu(HttpSession session) {
@@ -55,5 +64,14 @@ public class MenuServiceImpl implements MenuService {
             }
         }
         return ResultObj.ok().data(menuBodyEnd);
+    }
+
+    @Override
+    public ResultObj choosingRole(HttpSession session, SysRole sysRole) {
+        session.setAttribute("sysRole",sysRoleMapper.selectById(sysRole.getId()));
+        if (sysRole.getId() == null){
+            return ResultObj.error();
+        }
+        return ResultObj.ok().data(sysRole);
     }
 }
