@@ -56,7 +56,7 @@
 
         methods: {
             login(){
-                axios.post('/SysUserController/login',
+                axios.post('/LoginController/login',
                     {
                         account:this.form.account,
                         password:this.form.password
@@ -64,10 +64,23 @@
                 ).then(res=>{
                     if(res.data.success==true){
                         this.openMessage("登录成功",'success')
-                        location.href = "home.html";
+                        this.findUserRole();
+                        //location.href = "home.html";
                     }else{
                         this.openMessage("登陆失败",'error')
                     }
+                }).catch(error => {
+                    console.error('登录请求失败:', error);
+                    this.openMessage("登录请求失败，请稍后再试",'error');
+                });
+            },
+            findUserRole(){
+                axios.post('/LoginController/findUserRole',
+                    {
+
+                    }
+                ).then(res=>{
+                    console.log(res.data);
                 }).catch(error => {
                     console.error('登录请求失败:', error);
                     this.openMessage("登录请求失败，请稍后再试",'error');

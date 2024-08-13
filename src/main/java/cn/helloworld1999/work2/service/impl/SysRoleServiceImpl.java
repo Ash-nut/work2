@@ -2,6 +2,7 @@ package cn.helloworld1999.work2.service.impl;
 
 import cn.helloworld1999.work2.bean.RelUserRole;
 import cn.helloworld1999.work2.bean.SysRole;
+import cn.helloworld1999.work2.bean.SysUser;
 import cn.helloworld1999.work2.bean.vo.SysRoleVo;
 import cn.helloworld1999.work2.bean.vo.SysUserVo;
 import cn.helloworld1999.work2.mapper.RelUserRoleMapper;
@@ -69,15 +70,17 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @param sysUser 允许为空，为空则从 HttpSession 获取
      * @return List<SysRole>
      */
-    public List<SysRole> findUserRole(HttpSession session, SysUserVo sysUser) {
+    public List<SysRole> findUserRole(HttpSession session, SysUser sysUser) {
         LambdaQueryWrapper<RelUserRole> relUserRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<SysRole> sysRoleVoLambdaQueryWrapper = new LambdaQueryWrapper<>();
         List<RelUserRole> relUserRoleList;
         List<SysRole> sysRoleList = new java.util.ArrayList<>();
-        if (sysUser == null) {
-            sysUser = (SysUserVo) session.getAttribute("user");
+        if (sysUser.getId() == null) {
+            System.out.println("使用session获取user");
+            sysUser = (SysUser) session.getAttribute("user");
             relUserRoleLambdaQueryWrapper.eq(RelUserRole::getUid, sysUser.getId());
         } else {
+            System.out.println("使用User获取user");
             relUserRoleLambdaQueryWrapper.eq(RelUserRole::getUid, sysUser.getId());
         }
         relUserRoleList = relUserRoleMapper.selectList(relUserRoleLambdaQueryWrapper);

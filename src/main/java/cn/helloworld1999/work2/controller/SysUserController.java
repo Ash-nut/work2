@@ -32,17 +32,4 @@ public class SysUserController {
         return sysUserService.addUser(sysUserVo);
     }
 
-    @RequestMapping("login")
-    ResultObj login(HttpSession session, @RequestBody SysUserVo sysUserVo) {
-        return sysUserService.login(session, sysUserVo);
-    }
-
-    @RequestMapping("logout")
-    ResultObj logout (HttpSession session){
-        return sysUserService.logout(session);
-    }
-    @RequestMapping("signIn")
-    ResultObj signIn(@RequestBody SysUserVo sysUserVo) {
-        return sysUserService.signIn(sysUserVo);
-    }
 }

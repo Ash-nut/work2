@@ -50,5 +50,5 @@ public interface SysRoleService {
      * @param sysUser 用户查询条件对象，用于筛选用户相关的角色信息
      * @return 包含用户角色信息的List<SysRole>对象
      */
-    List<SysRole> findUserRole(HttpSession session, SysUserVo sysUser);
+    List<SysRole> findUserRole(HttpSession session, SysUser sysUser);
 }
