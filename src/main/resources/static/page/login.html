@@ -27,8 +27,25 @@
                 <el-button class="loginButton" type="primary" @click="login">登录</el-button>
             </el-form-item>
         </el-form>
-</div>
+    <el-dialog
+            title="选择角色"
+            :visible.sync="dialogVisibleCR"
+            width="30%">
+        <el-table :data="roles" :model="roles" :rules="addFormRules" ref="roles" label-width="800px">
 
+            <el-table-column
+                    prop="id" label="角色ID" width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="role" label="角色身份" width="180">
+            </el-table-column>
+        </el-table>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisibleAdd = false;roles = {}">取 消</el-button>
+            <el-button type="primary" @click="">确 定</el-button>
+        </span>
+    </el-dialog>
+</div>
 </body>
 </html>
 <!------------------------------------------------------------------------------------------------------------>
@@ -39,10 +56,12 @@
     new Vue({
         el: '#app',
         data: {
+            dialogVisibleCR: false,
             form: {
                 account: '',
                 password: ''
             },
+            roles: [],
             rules: {
                 account: [
                     { required: true, message: '用户名不能为空', trigger: 'blur' }
@@ -65,7 +84,6 @@
                     if(res.data.success==true){
                         this.openMessage("登录成功",'success')
                         this.findUserRole();
-                        //location.href = "home.html";
                     }else{
                         this.openMessage("登陆失败",'error')
                     }
@@ -80,11 +98,22 @@
 
                     }
                 ).then(res=>{
-                    console.log(res.data);
-                }).catch(error => {
-                    console.error('登录请求失败:', error);
-                    this.openMessage("登录请求失败，请稍后再试",'error');
+
+                    console.log(res.data.data)
+                    this.roles = res.data.data;
+                    if (this.roles.length > 1) {
+                        // 弹窗，【选择角色】
+                        console.log('应该弹窗了')
+                        this.dialogVisibleCR = true;
+                    } else {
+                        location.href = "home.html";
+                    }
+                }).catch(() => {
+                    this.openMessage("获取角色失败，请稍后再试", 'error');
                 });
+            },
+            choosingRole(role) {
+
             },
             openMessage(str,type) {
                 this.$message({
