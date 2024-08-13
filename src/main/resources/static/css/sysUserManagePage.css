@@ -4,6 +4,13 @@
     box-sizing: border-box;
     font-family: 'Arial', sans-serif;
 }
+html{
+    margin: 0;
+}
+body{
+    margin: 0;
+    border: 0;
+}
 
 .el-container {
     height: 100vh;
@@ -19,12 +26,11 @@
 }
 
 .el-header {
-    height: 20% !important; /* 使用重要性标记 */
+    height: 8% !important; /* 使用重要性标记 */
     background-color: #F56C6C; /* Element UI 主色 */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
     color: #ffffff; /* 白色文字 */
     flex-shrink: 0; /* 防止高度被压缩 */
 }
@@ -57,12 +63,13 @@
 }
 
 .el-button {
-    margin: 0 5px;
+    margin: 0;
 }
 
 .dialog-footer {
     text-align: right;
-    padding: 10px 0;
+    padding: 0;
+    height: 8%;
 }
 
 .block {

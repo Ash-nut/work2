@@ -18,32 +18,30 @@
     <el-container>
         <el-header id="header">
             <!-- 头部内容 -->
+            <el-button type="primary" @click="drawer = true">菜单</el-button>
         </el-header>
         <el-container id="container">
-            <el-aside id="aside">
-                <!-- 侧边栏内容 -->
-                <template>
-                    <div>
-                        <!-- 主菜单容器 -->
-                        <el-menu
-                                :default-active="activeIndex"
-                                class="el-menu-vertical-demo"
-                                @select="handleSelect"
-                        >
-                            <!-- 递归渲染菜单项 -->
-                            <template v-for="(item, index) in menuData">
-                                <menu-item :item="item" :key="item.id"></menu-item>
-                            </template>
-                        </el-menu>
-                    </div>
-                </template>
-            </el-aside>
-            <el-main>
-                <!-- 主体内容 -->
-                <iframe name="mainFrame" src="http://localhost:8080/page/sysPermManagePage.html" width="100%" height="100%"></iframe>
+            <el-main style="display: flex; flex-direction: column;">
+                <iframe name="mainFrame" src="" width="100%" height="100%" style="border: none; margin: 0; padding: 0; flex-grow: 1;"></iframe>
             </el-main>
         </el-container>
     </el-container>
+    <el-drawer
+            title="菜单"
+            :visible.sync="drawer"
+            direction="ltr"
+            size="20%">
+        <el-menu
+                :default-active="activeIndex"
+                class="el-menu-vertical-demo"
+                @select="handleSelect"
+        >
+            <!-- 递归渲染菜单项 -->
+            <template v-for="(item, index) in menuData">
+                <menu-item :item="item" :key="item.id"></menu-item>
+            </template>
+        </el-menu>
+    </el-drawer>
 </div>
 
 <script>
@@ -66,18 +64,22 @@
         el: '#app',
         data: {
             activeIndex: '1', // 默认激活的菜单项索引
-            menuData: []
+            menuData: [],
+            drawer: false // 控制抽屉的显示
         },
         methods: {
             handleSelect(key, keyPath) {
                 // 设置 iframe 的 src
                 const selectedItem = this.findMenuItemById(this.menuData, key);
+                console.log('Selected Item:', selectedItem); // 调试输出
                 if (selectedItem && selectedItem.route) {
                     document.querySelector('iframe[name="mainFrame"]').src = selectedItem.route;
+                    this.drawer = false; // 关闭抽屉
                 }
             },
             findMenuItemById(menuData, id) {
                 for (let item of menuData) {
+                    console.log('Checking item:', item); // 调试输出
                     if (item.id === id) {
                         return item;
                     }
@@ -103,8 +105,9 @@
         created() {
             // 获取菜单数据
             this.createRoleMenu();
-        }
+        },
     });
+
 </script>
 </body>
 </html>
