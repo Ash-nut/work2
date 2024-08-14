@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class OrderListServiceImpl implements OrderListService {
     }
 
     @Override
-    public ResultObj createOrder(HttpSession session, OrderInfoVo orderInfoVo) {
+    public ResultObj createOrder(HttpSession session,@RequestBody OrderInfoVo orderInfoVo) {
         SysUser sysUser = (SysUser) session.getAttribute("user");
         if (orderListMapper.insert(orderInfoVo)==1){
             //回传表单id，这是自动生成，自动获取的id,很方便！
@@ -63,8 +64,9 @@ public class OrderListServiceImpl implements OrderListService {
     }
     @Transactional
     @Override
-    public ResultObj createOrderAndNodes(HttpSession session, OrderInfoVo orderInfoVo) {
+    public ResultObj createOrderAndNodes(HttpSession session,@RequestBody OrderInfoVo orderInfoVo) {
         SysUser sysUser = (SysUser) session.getAttribute("user");
+        orderInfoVo.setCreateUid(sysUser.getId());
         if (orderListMapper.insert(orderInfoVo)==1){
             List<OrderNode> orderNodeList = orderInfoVo.getOrderNodeList();
             int i = 0;
