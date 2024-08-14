@@ -19,6 +19,7 @@ public class OrderNode {
     @TableId(value = "id",type = IdType.ASSIGN_ID)
     private Long id;
     @TableField("o_id")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long oId;
     @TableField("order_of_approval")
     private String orderOfApproval;

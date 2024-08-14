@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>发起工作流</title>
+    <meta charset="UTF-8">
+    <!-- 引入Element UI的CSS -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+    <!-- 引入Vue和Element UI的JS -->
+    <script src="../js/tool/vue.js"></script>
+    <script src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script> <!-- 引入 Axios -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .el-header .el-input {
+            width: 10%;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+
+            <!-- 表单头部 -->
+            <el-row :gutter="20" class="form-layout">
+                <span>
+                            <el-input v-model="inputOrderNodeInfo.id" placeholder="ID"></el-input>
+                            <el-input v-model="inputOrderNodeInfo.oId" placeholder="关联表单"></el-input>
+                            <el-input v-model="inputOrderNodeInfo.orderOfApproval" placeholder="审批顺序"></el-input>
+                            <el-input v-model="inputOrderNodeInfo.uId" placeholder="处理人ID"></el-input>
+                            <el-input v-model="inputOrderNodeInfo.resultOfHandling" placeholder="当前状态"></el-input>
+                            <el-input v-model="inputOrderNodeInfo.updateTime" placeholder="处理时间"></el-input>
+                        <el-input v-model="inputOrderNodeInfo.remark" placeholder="备注"></el-input>
+                    <el-button type="primary" @click="findAll">查询</el-button>
+                    </span>
+            </el-row>
+        </el-header>
+        <el-main>
+
+
+            <el-table
+                    stripe
+                    highlight-current-row
+                    :data="nodeList"
+                    style="width: 100%">
+                <el-table-column
+                        prop="id" label="ID" width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="oId" label="关联表单" width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="orderOfApproval" label="审批顺序" width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="uId" label="处理人ID" width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="updateTime" label="处理时间" width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="resultOfHandling" label="当前状态" width="150">
+                </el-table-column>
+                <el-table-column
+                        prop="remark" label="备注" width="150">
+                </el-table-column>
+            </el-table>
+        </el-main>
+        <el-footer>
+
+            <!-- 表单底部 -->
+            <div class="block">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="inputOrderNodeInfo.currentPage"
+                        :page-sizes="[10, 50, 100, 1000]"
+                        :page-size="inputOrderNodeInfo.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="inputOrderNodeInfo.total">
+                </el-pagination>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            // 表单主体信息
+            inputOrderNodeInfo: {
+                id: null,
+                oId: null,
+                orderOfApproval: null,
+                uId: null,
+                updateTime: null,
+                resultOfHandling: null,
+                remark: null,
+                currentPage: 1,
+                pageSize: 10,
+                total: 0
+            },
+            // 节点列表
+            nodeList: [],
+        },
+        methods: {
+            // 处理每页条数变化的函数
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.inputOrderNodeInfo.pageSize = val; // 更新每页条数
+                this.findAll(); // 重新获取数据
+            },
+            // 处理当前页码变化的函数
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.inputOrderNodeInfo.currentPage = val; // 更新当前页码
+                this.findAll(); // 重新获取数据
+            },
+            handleShow() {
+
+            },
+            findAll() {
+                axios.post('/OrderNodeController/findAll', {
+                    id: this.inputOrderNodeInfo.id,
+                    oId: this.inputOrderNodeInfo.oId,
+                    orderOfApproval: this.inputOrderNodeInfo.orderOfApproval,
+                    uId: this.inputOrderNodeInfo.uId,
+                    updateTime: this.inputOrderNodeInfo.updateTime,
+                    resultOfHandling: this.inputOrderNodeInfo.resultOfHandling,
+                    remark: this.inputOrderNodeInfo.remark,
+                    pageSize: this.inputOrderNodeInfo.pageSize,
+                    currentPage: this.inputOrderNodeInfo.currentPage,
+                }).then(res => {
+                    if (res.data.success === true) {
+                        this.nodeList = res.data.data.records;
+                        this.inputOrderNodeInfo.currentPage = res.data.data.current;
+                        this.inputOrderNodeInfo.pageSize = res.data.data.size;
+                        this.inputOrderNodeInfo.total = res.data.data.total; // 更新数据总条数
+                    }
+                });
+            },
+        },
+        created: function () {
+            this.findAll();
+        }
+    });
+</script>
+</body>
+</html>
