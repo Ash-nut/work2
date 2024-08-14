@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>审批单列表</title>
+    <!-- Element UI 的 CSS 文件 -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
+    <!-- 自定义样式文件 -->
+    <link rel="stylesheet" href="/css/orderInfoList.css">
+    <!-- Vue 和 Element UI 的 JS 文件 -->
+    <script type="text/javascript" src="../js/tool/vue.js"></script>
+    <script type="text/javascript" src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+
+        </el-header>
+        <el-main>
+
+        </el-main>
+        <el-footer>
+            <div class="block">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="inputInfo.currentPage"
+                        :page-sizes="[10, 50, 100, 1000]"
+                        :page-size="inputInfo.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="inputInfo.total">
+                </el-pagination>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+<!-------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------->
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            inputInfo: {
+                id: '1234567',
+                dId: '123',
+                orderName: '测试表单',
+                createDatetime: '2024-08-14',
+                createUid: '张三',
+                status: '进行中',
+                content: '忽如一夜春风来，千树万树梨花开',
+                remark: '这里是备注',
+                pageSize: 10,
+                currentPage: 1,
+                total: 0,
+            },
+            listData: [],
+        },
+        methods: {
+            // 处理每页条数变化的函数
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.inputInfo.pageSize = val; // 更新每页条数
+                this.findAll(); // 重新获取数据
+            },
+            // 处理当前页码变化的函数
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.inputInfo.currentPage = val; // 更新当前页码
+                this.findAll(); // 重新获取数据
+            },
+        },
+        created: function () {
+
+        },
+    })
+</script>
+</body>
+</html>
