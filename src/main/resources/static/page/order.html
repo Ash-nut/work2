@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>表单</title>
     <meta charset="UTF-8">
     <!-- 引入Element UI的CSS -->
     <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
     <!-- 引入Vue和Element UI的JS -->
     <script src="../js/tool/vue.js"></script>
     <script src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script> <!-- 引入 Axios -->
     <style>
         *{
             margin: 0;
@@ -20,7 +22,7 @@
         <!-- 表单头部 -->
         <el-header style="display: flex; flex-direction: column;height: 40%">
             <el-card shadow="never" class="box-card" style="height: 100%">
-                <el-table :data="orderInfoTableData" border style="width: 100%;" v-if="orderInfo">
+                <el-table :data="orderInfoTableData" border style="width: 100%;" v-if="orderInfo.id">
                     <el-table-column prop="label" label="标签" width="180">
                     </el-table-column>
                     <el-table-column prop="value" label="值">
@@ -46,7 +48,7 @@
                         :key="index"
                         :title="step.uid"
                         :description="step.remark"
-                        :status="step.result_of_handling"
+                        :process-status="step.resultOfHandling"
                     ></el-step>
                 </el-steps>
             </el-card>
@@ -80,30 +82,35 @@
                 },
                 // 表单底部进度条信息
                 active: 0,
-                stepData: [
-                    {
-                        uid: '发起人',
-                        remark: '处理意见',
-                        result_of_handling: 'success'
-                    },
-                    {
-                        uid: '处理人',
-                        remark: '处理意见',
-                        result_of_handling: 'process'
-                    },
-                ]
+                stepData: []
             };
         },
+        methods: {
+            // 获取进度条的节点信息
+            getNode(){
+                console.log("在请求节点信息了");
+                axios.post('/OrderNodeController/findNodeOfOrder', {
+                    id: this.orderInfo.id,
+                }).then(res => {
+                    this.stepData = res.data.data;
+                });
+            },
+        },
         created: function() {
-            // 初始化表格数据
-            this.orderInfoTableData = [
-                { label: '表单ID', value: this.orderInfo.id },
-                { label: '部门ID', value: this.orderInfo.dId },
-                { label: '表单名称', value: this.orderInfo.orderName },
-                { label: '创建日期', value: this.orderInfo.createDatetime },
-                { label: '创建人', value: this.orderInfo.createUid },
-                { label: '表单状态', value: this.orderInfo.status }
-            ];
+            const sessionData = sessionStorage.getItem('orderInfo');
+            if (sessionData) {
+                this.orderInfo = JSON.parse(sessionData);
+                // 初始化表格数据
+                this.orderInfoTableData = [
+                    { label: '表单ID', value: this.orderInfo.id },
+                    { label: '部门ID', value: this.orderInfo.dId },
+                    { label: '表单名称', value: this.orderInfo.orderName },
+                    { label: '创建日期', value: this.orderInfo.createDatetime },
+                    { label: '创建人', value: this.orderInfo.createUid },
+                    { label: '表单状态', value: this.orderInfo.status }
+                ];
+                this.getNode();
+            }
         }
     });
 </script>

@@ -22,7 +22,7 @@ public class OrderNode {
     private String orderOfApproval;
     @TableField("u_id")
     private Long uId;
-    @TableField("create_time")
+    @TableField("update_time")
     private Date updateTime;
     @TableField("result_of_handling")
     private String resultOfHandling;

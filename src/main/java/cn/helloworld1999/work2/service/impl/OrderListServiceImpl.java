@@ -24,7 +24,7 @@ public class OrderListServiceImpl implements OrderListService {
         Page<OrderInfo> page = Page.of(orderInfoVo.getCurrentPage(), orderInfoVo.getPageSize());
 
         SysUser sysUser = (SysUser) session.getAttribute("user");
-        SysRole sysRole = (SysRole) session.getAttribute("role");
+        SysRole sysRole = (SysRole) session.getAttribute("sysRole");
         boolean isAdmin = sysRole.getRole().equals("超级管理员");
         LambdaQueryWrapper<OrderInfo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         // 先写登录角色是管理员的情况，先查询所有
