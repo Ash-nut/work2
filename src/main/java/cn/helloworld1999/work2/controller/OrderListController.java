@@ -17,4 +17,12 @@ public class OrderListController {
     public Object findAll(HttpSession session,@RequestBody OrderInfoVo orderInfoVo) {
         return orderListService.findAll(session, orderInfoVo);
     }
+    @RequestMapping("createOrder")
+    public Object createOrder(HttpSession session,@RequestBody OrderInfoVo orderInfoVo) {
+        return orderListService.createOrder(session, orderInfoVo);
+    }
+    @RequestMapping("createOrderAndNodes")
+    public Object createOrderAndNodes(HttpSession session,@RequestBody OrderInfoVo orderInfoVo) {
+        return orderListService.createOrderAndNodes(session, orderInfoVo);
+    }
 }

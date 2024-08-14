@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderNodeServiceImpl implements OrderNodeService {
     @Resource
@@ -29,5 +31,19 @@ public class OrderNodeServiceImpl implements OrderNodeService {
     @Override
     public ResultObj updateNode(OrderNode orderNode) {
         return null;
+    }
+
+    @Override
+    public ResultObj createNodeByNodeList(List<OrderNode> orderNodeList) {
+        int i=0;
+        for (OrderNode orderNode : orderNodeList) {
+            if (orderNodeMapper.insert(orderNode)==1){
+                i++;
+            }
+        }
+        if (i==orderNodeList.size()){
+            return ResultObj.ok();
+        }
+        return ResultObj.error();
     }
 }

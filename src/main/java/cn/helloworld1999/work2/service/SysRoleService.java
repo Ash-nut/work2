@@ -7,9 +7,10 @@ import cn.helloworld1999.work2.bean.vo.SysRoleVo;
 import cn.helloworld1999.work2.bean.vo.SysUserVo;
 import cn.helloworld1999.work2.util.ResultObj;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 public interface SysRoleService {
     /**
      * 查询所有角色信息

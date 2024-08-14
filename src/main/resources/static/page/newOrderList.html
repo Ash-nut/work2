@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>发起工作流</title>
+    <meta charset="UTF-8">
+    <!-- 引入Element UI的CSS -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+    <!-- 引入Vue和Element UI的JS -->
+    <script src="../js/tool/vue.js"></script>
+    <script src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script> <!-- 引入 Axios -->
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container style="height: 100vh; width: 100%; display: flex; flex-direction: column;">
+        <!-- 表单头部 -->
+        <el-header style="display: flex; flex-direction: column;height: 40%">
+            <el-card shadow="never" class="box-card" style="height: 100%">
+
+
+            </el-card>
+        </el-header>
+
+        <!-- 表单主体 -->
+        <el-main style="flex: 1;height: 30%">
+            <el-card shadow="hover" class="box-card" style="height: 100%">
+                <el-form :model="orderInfo" label-width="80px">
+                    <el-form-item label="表单名称">
+                        <el-input v-model="orderInfo.orderName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="表单内容">
+                        <el-input type="textarea" v-model="orderInfo.content"></el-input>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                        <el-input v-model="orderInfo.remark"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-main>
+
+        <!-- 表单底部 -->
+        <el-footer style="height: 30%">
+            <el-card shadow="never" class="box-card" style="height: 100%">
+                <el-form-item label="节点顺序">
+                    <el-input v-model="nodeInfo.orderOfApproval"></el-input>
+                </el-form-item>
+                <el-form-item label="审批人ID">
+                    <el-input type="textarea" v-model="nodeInfo.uId"></el-input>
+                </el-form-item>
+            </el-card>
+            <el-button type="primary" @click="addNode">添加审批节点</el-button>
+            <el-table-column>
+                <el-table-column prop="orderOfApproval" label="节点顺序"></el-table-column>
+                <el-table-column prop="uId" label="审批人ID"></el-table-column>
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            type="danger"
+                            @click="deleteNode(scope.$index, scope.row)">删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-footer>
+    </el-container>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                // 表单头部信息
+                orderInfoTableData: [
+                    { label: '表单ID', value: '' },
+                    { label: '部门ID', value: '' },
+                    { label: '表单名称', value: '' },
+                    { label: '创建日期', value: '' },
+                    { label: '创建人', value: '' },
+                    { label: '表单状态', value: '' }
+                ],
+                // 表单主体信息
+                orderInfo: {
+                    id: null,
+                    dId: null,
+                    orderName: null,
+                    createDatetime: null,
+                    createUid: null,
+                    status: null,
+                    content: null,
+                    remark: null
+                },
+                // 节点输入信息
+                nodeInfo:{
+                    orderOfApproval:null,
+                    uId:null,
+                    resultOfHandling:'wait'
+                },
+                // 节点列表
+                nodeList:[],
+                // 表单底部进度条信息
+                active: 0,
+                stepData: []
+            };
+        },
+        methods: {
+            createOrder(){
+                axios.post('/OrderController/createOrderAndNodes', {
+                    orderName: this.orderInfo.orderName,
+                    content: this.orderInfo.content,
+                    remark: this.orderInfo.remark,
+                    dId:this.orderInfo.dId,
+                    orderNodeList:this.nodeList,
+                }).then(res => {
+                    this.orderInfo.id = res.data.data.id;
+                    this.orderInfo.createDatetime = res.data.data.createDatetime;
+                })
+            },
+            deleteNode(index,row){
+                this.nodeList.delete(index);
+            },
+            createNode(){
+                this.nodeList.push(this.nodeInfo);
+            },
+            // 获取进度条的节点信息
+            getNode(){
+                console.log("在请求节点信息了");
+                axios.post('/OrderNodeController/findNodeOfOrder', {
+                    id: this.orderInfo.id,
+                }).then(res => {
+                    this.stepData = res.data.data;
+                });
+            },
+        },
+        created: function() {
+
+        }
+    });
+</script>
+</body>
+</html>

@@ -3,7 +3,9 @@ import cn.helloworld1999.work2.bean.SysPerm;
 import cn.helloworld1999.work2.bean.SysRole;
 import cn.helloworld1999.work2.bean.vo.SysPermVo;
 import cn.helloworld1999.work2.util.ResultObj;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public interface SysPermService {
     /**
      * 查询所有权限信息
