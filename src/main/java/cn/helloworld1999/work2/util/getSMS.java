@@ -1,4 +1,3 @@
-/*
 package cn.helloworld1999.work2.util;
 
 import com.aliyun.auth.credentials.Credential;
@@ -9,13 +8,12 @@ import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 import com.google.gson.Gson;
 import darabonba.core.client.ClientOverrideConfiguration;
 
-import javax.servlet.http.HttpServlet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-public class getSMS extends HttpServlet {
-    public static String getSMS() throws Exception {
+public class getSMS {
+    public static String getSMS(String phone) throws Exception {
 
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
                 // Please ensure that the environment variables ALIBABA_CLOUD_ACCESS_KEY_ID and ALIBABA_CLOUD_ACCESS_KEY_SECRET are set.
@@ -37,7 +35,7 @@ public class getSMS extends HttpServlet {
         String ranStr = String.valueOf((int) ((Math.random() * 9 + 1) * Math.pow(10, 5)));
 // Parameter settings for API request
         SendSmsRequest sendSmsRequest = SendSmsRequest.builder()
-                .phoneNumbers("15146878867")
+                .phoneNumbers(phone)
                 .signName("学习笔记网站")
                 .templateCode("SMS_469015340")
                 .templateParam("{\"code\":\"" + ranStr + "\"}")
@@ -59,4 +57,3 @@ public class getSMS extends HttpServlet {
     }
 
 }
-*/

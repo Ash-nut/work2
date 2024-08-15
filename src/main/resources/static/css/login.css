@@ -6,7 +6,7 @@ body {
 .el-main {
     width: 30vw;
     padding: 20vh;
-    background-color: white;
+    background-color: rgba(43, 80, 201, 0.65);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -26,7 +26,7 @@ body {
 .loginButton{
     width: 10vw;
     height: 5vh;
-    background-color: #b62222;
+    background-color: #3451af;
 }
 #loginForm{
     align-items: center;
@@ -34,14 +34,13 @@ body {
     width: 35vw;
     background-color: rgba(0, 0, 0, 0.35);
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0);
+    box-shadow: 0 2px 4px rgba(43, 80, 201, 0.65);
     display: flex;
     justify-content: center;
     flex-direction: column;
 
 }
 #app{
-    background-image: url("../image/161121.jpg");
     height: 100vh;
     width: 100vw;
     display: flex;

@@ -9,29 +9,49 @@
     <script src="../js/tool/vue.js"></script>
     <script src="../element-ui/lib/index.js"></script>
     <script type="text/javascript" src="../js/tool/axios.js"></script> <!-- 引入 Axios -->
+
     <style>
+        :root {
+            --main-padding: 10px;
+            --main-margin: 20px;
+            --container-height: 100vh;
+            --container-width: 100%;
+            --card-height: 30%;
+            --card-padding: var(--main-padding);
+            --table-width: 100%;
+            --input-z-index: 1;
+        }
+
         * {
             margin: 0;
             padding: 0;
         }
-        /* 调整容器的高度和宽度 */
+
         .el-container {
-            height: 100vh;
-            width: 100%;
+            height: var(--container-height);
+            width: var(--container-width);
             display: flex;
             flex-direction: column;
         }
-        /* 调整表单项的高度 */
+
         .el-form-item {
-            margin-bottom: 20px;
+            margin-bottom: var(--main-margin);
         }
-        /* 调整表格的高度和宽度 */
+
         .el-table {
-            width: 100%;
+            width: var(--table-width);
         }
-        /* 确保输入框显示 */
+
         .el-input {
-            z-index: 1;
+            z-index: var(--input-z-index);
+        }
+
+        .box-card {
+            padding: var(--card-padding);
+        }
+
+        .box-card:first-of-type {
+            height: var(--card-height);
         }
     </style>
 </head>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>审批单管理</title>
+    <!-- Element UI 的 CSS 文件 -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css"/>
+    <!-- 自定义样式文件 -->
+    <link rel="stylesheet" href="/css/orderInfoList.css">
+    <!-- Vue 和 Element UI 的 JS 文件 -->
+    <script type="text/javascript" src="../js/tool/vue.js"></script>
+    <script type="text/javascript" src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <span>
+                <el-input v-model="inputInfo.id" placeholder="ID"></el-input>
+                <el-input v-model="inputInfo.dId" placeholder="部门ID"></el-input>
+                <el-input v-model="inputInfo.orderName" placeholder="表单名称"></el-input>
+                <el-input v-model="inputInfo.createDatetime" placeholder="创建时间"></el-input>
+                <el-input v-model="inputInfo.createUid" placeholder="创建人ID"></el-input>
+                <el-input v-model="inputInfo.status" placeholder="状态"></el-input>
+                <el-button type="primary" @click="findAll">查询</el-button>
+            </span>
+        </el-header>
+        <el-main>
+            <el-table
+                    stripe
+                    highlight-current-row
+                    :data="orderList"
+                    style="width: 100%">
+                <el-table-column
+                        prop="id" label="表单ID" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="dId" label="部门ID" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="orderName" label="表单名称" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="createDatetime" label="创建时间" width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="state" label="状态" width="180">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="handleShow(scope.$index, scope.row)">查看
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+        <el-footer>
+            <div class="block">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="inputInfo.currentPage"
+                        :page-sizes="[10, 50, 100, 1000]"
+                        :page-size="inputInfo.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="inputInfo.total">
+                </el-pagination>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+<!-------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------->
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            orderList: [],
+            inputInfo: {
+                id: null,
+                dId: null,
+                orderName: null,
+                createDatetime: null,
+                createUid: null,
+                status: null,
+                content: null,
+                remark: null,
+                pageSize: 10,
+                currentPage: 1,
+                total: 0,
+            },
+        },
+        methods: {
+            findAll() {
+                axios.post('/OrderListController/findAll', {
+                    id: this.inputInfo.id,
+                    dId: this.inputInfo.dId,
+                    orderName: this.inputInfo.orderName,
+                    createDatetime: this.inputInfo.createDatetime,
+                    createUid: this.inputInfo.createUid,
+                    status: this.inputInfo.status,
+                    content: this.inputInfo.content,
+                    remark: this.inputInfo.remark,
+                    pageSize: this.inputInfo.pageSize,
+                    currentPage: this.inputInfo.currentPage,
+                }).then(res => {
+                    if (res.data.success === true) {
+                        this.orderList = res.data.data.records;
+                        this.inputInfo.currentPage = res.data.data.current;
+                        this.inputInfo.pageSize = res.data.data.size;
+                        this.inputInfo.total = res.data.data.total; // 更新数据总条数
+                    }
+                });
+            },
+            // 处理每页条数变化的函数
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.inputInfo.pageSize = val; // 更新每页条数
+                this.findAll(); // 重新获取数据
+            },
+            // 处理当前页码变化的函数
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.inputInfo.currentPage = val; // 更新当前页码
+                this.findAll(); // 重新获取数据
+            },
+            handleShow(index,row){
+                sessionStorage.setItem("orderInfo",JSON.stringify(this.orderList[index]));
+                location.replace("http://localhost:8080/page/order.html");
+            },
+        },
+        created: function () {
+            this.findAll();
+        },
+    })
+</script>
+</body>
+</html>

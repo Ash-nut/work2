@@ -1,4 +1,5 @@
 package cn.helloworld1999.work2.service;
+import cn.helloworld1999.work2.bean.SysUser;
 import cn.helloworld1999.work2.bean.vo.SysUserVo;
 import cn.helloworld1999.work2.util.ResultObj;
 import jakarta.servlet.http.HttpSession;
@@ -61,7 +62,7 @@ public interface SysUserService {
      * @param sysUserVo 包含注册用户信息的封装对象
      * @return ResultObj 表示操作结果，包含注册结果和可能的错误信息
      */
-    ResultObj signIn(SysUserVo sysUserVo);
+    ResultObj signIn(SysUser sysUser);
 
 
 }

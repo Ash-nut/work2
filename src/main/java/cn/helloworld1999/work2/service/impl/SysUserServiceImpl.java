@@ -75,10 +75,10 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Transactional
     @Override
-    public ResultObj signIn(SysUserVo sysUserVo) {
+    public ResultObj signIn(SysUser sysUser) {
         try{
-            if ((sysUserMapper.selectById(sysUserVo.getId())!=null)){
-                sysUserMapper.insert(sysUserVo);
+            if ((sysUserMapper.selectById(sysUser.getId())!=null)){
+                sysUserMapper.insert(sysUser);
                 return ResultObj.ok();
             }
         }catch (Exception e){
