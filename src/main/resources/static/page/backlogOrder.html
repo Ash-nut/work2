@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>表单</title>
+    <meta charset="UTF-8">
+    <!-- 引入Element UI的CSS -->
+    <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+    <!-- 引入Vue和Element UI的JS -->
+    <script src="../js/tool/vue.js"></script>
+    <script src="../element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="../js/tool/axios.js"></script> <!-- 引入 Axios -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container style="height: 100vh; width: 100%; display: flex; flex-direction: column;">
+        <!-- 表单头部 -->
+        <el-header style="display: flex; flex-direction: column;height: 40%">
+            <el-card shadow="never" class="box-card" style="height: 100%">
+                <el-table :data="orderInfoTableData" border style="width: 100%;" v-if="orderInfo.id">
+                    <el-table-column prop="label" label="标签" width="180">
+                    </el-table-column>
+                    <el-table-column prop="value" label="值">
+                    </el-table-column>
+                </el-table>
+            </el-card>
+        </el-header>
+
+        <!-- 表单主体 -->
+        <el-main style="flex: 1;height: 30%">
+            <el-card shadow="hover" class="box-card" style="height: 100%">
+                <p>表单内容: {{ orderInfo.content }}</p>
+                <p>备注: {{ orderInfo.remark }}</p>
+            </el-card>
+        </el-main>
+
+        <!-- 表单底部 -->
+        <el-footer style="height: 30%">
+            <el-card shadow="never" class="box-card" style="height: 100%;align-content: center">
+                <el-steps :active="active" align-center finish-status="success">
+                    <el-step
+                            v-for="(step, index) in stepData"
+                            :key="index"
+                            :title="step.uid"
+                            :description="step.remark"
+                            :status="step.resultOfHandling"
+                    ></el-step>
+                </el-steps>
+                <el-button type="primary" @click="updateNode('finish')" :disabled="disabledFlag">同意</el-button>
+                <el-button type="primary" @click="updateNode('error')" :disabled="disabledFlag">驳回</el-button>
+            </el-card>
+        </el-footer>
+    </el-container>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                // 表单头部信息
+                disabledFlag: false,
+                orderInfoTableData: [
+                    {label: '表单ID', value: ''},
+                    {label: '部门ID', value: ''},
+                    {label: '表单名称', value: ''},
+                    {label: '创建日期', value: ''},
+                    {label: '创建人', value: ''},
+                    {label: '表单状态', value: ''}
+                ],
+                // 表单主体信息
+                orderInfo: {
+                    id: null,
+                    dId: null,
+                    orderName: null,
+                    createDatetime: null,
+                    createUid: null,
+                    status: null,
+                    content: null,
+                    remark: null,
+                },
+                // 表单底部进度条信息
+                active: 0,
+                stepData: [],
+                nodeInfo: null, // 初始化为 null
+            };
+        },
+        methods: {
+
+            updateNode(resultOfHandling) {
+                let letId = null;
+                for (let i = 0; i < this.stepData.length; i++) {
+                    if (this.stepData[i].resultOfHandling === 'process') {
+                        letId = this.stepData[i].id;
+                        break;
+                    }
+                }
+                axios.post('/OrderNodeController/updateBacklog', {
+                    id: letId,
+                    oId: this.orderInfo.id,
+                    resultOfHandling: resultOfHandling,
+                }).then(res => {
+                    if (res.data.success === true) {
+                        this.disabledFlag = true;
+                        this.$message.success('操作成功');
+                        this.getNode();
+                    }
+                    if (res.data.success === false) {
+                        this.$message.error(res.data.message);
+                    }
+                });
+            },
+            // 获取进度条的节点信息
+            getNode() {
+                console.log("在请求节点信息了");
+                axios.post('/OrderNodeController/findNodeOfOrder', {
+                    id: this.orderInfo.id,
+                }).then(res => {
+                    this.stepData = res.data.data;
+                });
+            },
+            getBaseInfo() {
+                const nodeInfoStr = sessionStorage.getItem('nodeInfo');
+                if (nodeInfoStr) {
+                    this.nodeInfo = JSON.parse(nodeInfoStr);
+                    console.log(this.nodeInfo);
+                    this.orderInfo.id = this.nodeInfo.oId;
+                    axios.post("/OrderListController/findOrderById", {
+                        id: this.orderInfo.id,
+                    }).then(res => {
+                        this.orderInfo = res.data.data;
+                    }).catch(err => {
+                        console.error('获取信息失败', err);
+                    });
+                } else {
+                    console.warn('获取信息失败');
+                }
+            }
+
+        },
+        created: function () {
+            this.getBaseInfo()
+            this.getNode();
+            // 初始化表格数据
+            this.orderInfoTableData = [
+                {label: '表单ID', value: this.orderInfo.id},
+                {label: '部门ID', value: this.orderInfo.dId},
+                {label: '表单名称', value: this.orderInfo.orderName},
+                {label: '创建日期', value: this.orderInfo.createDatetime},
+                {label: '创建人', value: this.orderInfo.createUid},
+                {label: '表单状态', value: this.orderInfo.status}
+            ];
+
+
+        }
+
+    });
+</script>
+</body>
+</html>

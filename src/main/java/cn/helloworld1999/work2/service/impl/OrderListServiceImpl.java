@@ -70,6 +70,7 @@ public class OrderListServiceImpl implements OrderListService {
         if (orderListMapper.insert(orderInfoVo)==1){
             List<OrderNode> orderNodeList = orderInfoVo.getOrderNodeList();
             int i = 0;
+            orderNodeList.get(0).setResultOfHandling("process");
             for (OrderNode orderNode : orderNodeList) {
                 orderNode.setOId(orderInfoVo.getId());
                 orderNodeMapper.insert(orderNode);
@@ -80,5 +81,10 @@ public class OrderListServiceImpl implements OrderListService {
             }
         }
         return ResultObj.error();
+    }
+
+    @Override
+    public ResultObj findOrderById(OrderInfo orderInfo) {
+        return ResultObj.ok().data(orderListMapper.selectById(orderInfo.getId()));
     }
 }

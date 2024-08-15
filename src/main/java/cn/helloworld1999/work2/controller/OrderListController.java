@@ -25,4 +25,8 @@ public class OrderListController {
     public Object createOrderAndNodes(HttpSession session,@RequestBody OrderInfoVo orderInfoVo) {
         return orderListService.createOrderAndNodes(session, orderInfoVo);
     }
+    @RequestMapping("findOrderById")
+    public Object findOrderById(@RequestBody OrderInfoVo orderInfoVo) {
+        return orderListService.findOrderById(orderInfoVo);
+    }
 }

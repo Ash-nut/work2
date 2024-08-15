@@ -15,4 +15,6 @@ public interface OrderNodeService {
     ResultObj findNodeOfOrder(OrderInfoVo orderInfoVo);
     ResultObj updateNode(OrderNode orderNode);
     ResultObj createNodeByNodeList(List<OrderNode> orderNodeList);
+    ResultObj findAllBacklog(HttpSession session,OrderNodeVo orderNodeVo);
+    ResultObj updateBacklog(OrderNode orderNode);
 }

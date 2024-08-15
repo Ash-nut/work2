@@ -64,6 +64,14 @@
                 <el-table-column
                         prop="remark" label="备注" width="150">
                 </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                @click="handleShow(scope.$index, scope.row)">处理
+                        </el-button>
+                    </template>
+                </el-table-column>
             </el-table>
         </el-main>
         <el-footer>
@@ -116,8 +124,9 @@
                 this.inputOrderNodeInfo.currentPage = val; // 更新当前页码
                 this.findAll(); // 重新获取数据
             },
-            handleShow() {
-
+            handleShow(index, row) {
+                sessionStorage.setItem('nodeInfo', JSON.stringify(this.nodeList[index]));
+                location.href = "../page/backlogOrder.html";
             },
             findAllBacklog() {
                 axios.post('/OrderNodeController/backlog', {
@@ -126,7 +135,7 @@
                     orderOfApproval: this.inputOrderNodeInfo.orderOfApproval,
                     uId: this.inputOrderNodeInfo.uId,
                     updateTime: this.inputOrderNodeInfo.updateTime,
-                    resultOfHandling: this.inputOrderNodeInfo.resultOfHandling,
+                    resultOfHandling: 'process',
                     remark: this.inputOrderNodeInfo.remark,
                     pageSize: this.inputOrderNodeInfo.pageSize,
                     currentPage: this.inputOrderNodeInfo.currentPage,

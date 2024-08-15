@@ -100,6 +100,10 @@
                         // 弹窗，【选择角色】
                         this.dialogVisibleCR = true;
                     } else {
+                        axios.post('/LoginController/choosingRole',
+                            {
+                                id:this.roles[0].id
+                            })
                         location.href = "home.html";
                     }
                 }).catch(() => {

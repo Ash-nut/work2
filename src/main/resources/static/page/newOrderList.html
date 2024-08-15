@@ -119,8 +119,6 @@
         },
         methods: {
             createOrder() {
-                console.log('111111111111111111111111111111111111111');
-                console.log(this.nodeList);
                 axios.post('/OrderListController/createOrderAndNodes', {
                     orderName: this.orderInfo.orderName,
                     content: this.orderInfo.content,
@@ -128,8 +126,31 @@
                     dId: this.orderInfo.dId,
                     orderNodeList: this.nodeList,
                 }).then(res => {
-                    this.orderInfo.id = res.data.data.id;
-                    this.orderInfo.createDatetime = res.data.data.createDatetime;
+                    if (res.data.success === true) {
+                        this.$message({
+                            message: '发起工作流成功',
+                            type: 'success'
+                        });
+                        this.orderInfo = {
+                            id: null,
+                            dId: null,
+                            orderName: null,
+                            createDatetime: null,
+                            createUid: null,
+                            status: null,
+                            content: null,
+                            remark: null,
+                            currentPage: 1,
+                            pageSize: 10,
+                            total: 0
+                        };
+                        this.nodeList = [];
+                     }else {
+                        this.$message({
+                            message: '发起工作流失败',
+                            type: 'error'
+                        });
+                    }
                 });
             },
             deleteNode(index, row) {
