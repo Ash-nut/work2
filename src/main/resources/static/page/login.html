@@ -202,7 +202,7 @@
             checkSMS(){
                 axios.post('/LoginController/checkSMS',
                     {
-                        phone:this.signInForm.codeSMS
+                        code:this.signInForm.codeSMS
                     }
                 ).then(res=>{
                     if(res.data.success===true){

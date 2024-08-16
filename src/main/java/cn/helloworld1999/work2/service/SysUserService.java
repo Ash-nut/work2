@@ -59,10 +59,9 @@ public interface SysUserService {
     /**
      * 用户注册
      *
-     * @param sysUserVo 包含注册用户信息的封装对象
+     * @param sysUser 包含注册用户信息的封装对象
      * @return ResultObj 表示操作结果，包含注册结果和可能的错误信息
      */
     ResultObj signIn(SysUser sysUser);
-
 
 }

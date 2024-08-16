@@ -77,13 +77,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public ResultObj signIn(SysUser sysUser) {
         try{
-            if ((sysUserMapper.selectById(sysUser.getId())!=null)){
                 sysUserMapper.insert(sysUser);
                 return ResultObj.ok();
-            }
         }catch (Exception e){
-            throw new RuntimeException();
+            return ResultObj.error();
         }
-        return ResultObj.error().msg("账号已存在，注册失败");
     }
 }
