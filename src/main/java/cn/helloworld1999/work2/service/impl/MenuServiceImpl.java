@@ -7,9 +7,6 @@ import cn.helloworld1999.work2.mapper.SysRoleMapper;
 import cn.helloworld1999.work2.service.MenuService;
 import cn.helloworld1999.work2.service.SysPermService;
 import cn.helloworld1999.work2.util.ResultObj;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
